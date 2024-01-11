@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- BootStrap CDN -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <title>Contact Us</title>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg bg-body-tertiary p-3">
+        <div class="container-fluid">
+            <img src="/icon.ico" class="mx-2" width="30" height="30" alt="">
+          <a class="navbar-brand" href="#">MatchingJodi</a>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse flex-end" id="navbarNav">
+            <ul class="navbar-nav">
+              <li class="nav-item">
+                <a class="nav-link active" aria-current="page" href="#">Home</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#">Testimonials</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#">Contact us</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link disabled" aria-disabled="true">About Us</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </nav>
+      <!-- Main -->
+    <section>
+        <form class="container my-4" onsubmit="return validateForm()">
+            <div class="mb-3">
+                <label for="exampleInputNumber" class="form-label">Mobile Number</label>
+                <input type="tel" class="form-control" id="exampleInputNumber" aria-describedby="numberHelp" required pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}" title="Please enter a valid phone number in the format XXX-XXX-XXXX">
+                <div id="numberHelp" class="form-text">We'll never share your mobile number with anyone else.</div>
+            </div>
+            <div class="mb-3">
+                <label for="exampleInputOTP" class="form-label">OTP</label>
+                <div class="input-group">
+                    <input type="text" class="form-control" id="exampleInputOTP" required pattern="[0-9]{6}" title="Please enter a valid 6-digit OTP">
+                    <button type="button" class="btn btn-outline-primary btn-get-otp" onclick="getOTP()">Get OTP</button>
+                </div>
+            </div>
+
+            <div class="mb-3">
+                <label for="exampleFormControlInput1" class="form-label">Email address</label>
+                <input type="email" class="form-control" id="exampleFormControlInput1" placeholder="name@example.com" required>
+            </div>
+            <div class="mb-3">
+                <label for="exampleFormControlTextarea1" class="form-label">Enter Your Queries</label>
+                <textarea class="form-control" id="exampleFormControlTextarea1" rows="3" required></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary float-right">Submit</button>
+        </form>
+
+        </section>
+    
+        <script>
+            function validateForm() {
+                var email = document.getElementById('exampleFormControlInput1').value;
+                var textarea = document.getElementById('exampleFormControlTextarea1').value;
+                var mobileNumber = document.getElementById('exampleInputNumber').value;
+                var otp = document.getElementById('exampleInputOTP').value;
+    
+                if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+                    alert("Please enter a valid email address");
+                    return false;
+                }
+    
+                if (textarea.trim() === "") {
+                    alert("Please enter some text in the textarea");
+                    return false;
+                }
+    
+                if (!/^[0-9]{3}-[0-9]{3}-[0-9]{4}$/.test(mobileNumber)) {
+                    alert("Please enter a valid phone number in the format XXX-XXX-XXXX");
+                    return false;
+                }
+    
+                if (!/^\d{6}$/.test(otp)) {
+                    alert("Please enter a valid 6-digit OTP");
+                    return false;
+                }
+    
+                // You can add additional custom validation logic here if needed
+    
+                return true;
+            }
+    
+            function getOTP() {
+                // Add logic to generate and send OTP
+            }
+        </script>
+    
+    </body>
+    </html>
