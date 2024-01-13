@@ -50,14 +50,14 @@
         <div class="input-group">
           <input type="text" class="form-control" id="exampleInputOTP" pattern="[0-9]{6}"
             title="Please enter a valid 6-digit OTP">
-          <button type="button" class="btn btn-outline-primary btn-get-otp" onclick="getOTP()">Get OTP</button>
+          <button type="button" class="btn btn-outline-primary btn-get-otp" onclick="generateAndSendOTP()">Get OTP</button>
         </div>
       </div>
       <div style="text-align: right;">
         <button type="submit" id="submitButton" class="btn btn-primary" disabled>Submit</button>
       </div>
     </form>
-
+  
     <!-- Contact Form -->
     <form class="container my-4" id="contactForm" style="display:none;" onsubmit="return validateContactForm()">
       <!-- Add your contact form fields here -->
@@ -89,7 +89,7 @@
   var configuration = {
     widgetId: "34616c746f61383137363438",
     tokenAuth: "381781T3dHu7YQ658dc8e8P1",
-    identifier: "<enter mobile number/email here> (optional)",
+    identifier: "Enter Your Phone Number",
     exposeMethods: "<true | false> (optional)",
     success: (data) => {
       console.log('success response', data);
@@ -104,9 +104,81 @@
   window.onload = function() {
     initSendOTP(configuration);
   };
+
+  // Function to generate and send OTP
+  function generateAndSendOTP() {
+    var mobileNumber = document.getElementById("exampleInputNumber").value.trim();
+
+    // Make an AJAX request to the server to generate and send OTP
+    axios.post("/generateOTP", { mobileNumber })
+      .then(function (response) {
+        // Handle success
+        console.log(response.data);
+        alert("OTP sent successfully!");
+
+        // Optionally, you can enable the submit button after OTP is sent
+        document.getElementById("submitButton").disabled = false;
+      })
+      .catch(function (error) {
+        // Handle error
+        console.error('Error generating OTP:', error.response.data);
+        alert("Error generating OTP. Please try again.");
+      });
+  }
+
+  // Function to validate the OTP form
+  function validateOTPForm(event) {
+    // Validation logic
+    var mobileNumber = document.getElementById("exampleInputNumber").value.trim();
+    var enteredOTP = document.getElementById("exampleInputOTP").value.trim();
+
+    // Checking if the mobile number and OTP are not empty
+    if (mobileNumber === "" || enteredOTP === "") {
+      alert("Please enter both mobile number and OTP.");
+      return false; // Returning false to prevent form submission
+    }
+
+    // Assume that the mobile number and OTP are valid for demonstration purposes
+    document.getElementById("contactForm").style.display = "block";
+    document.getElementById("validateForm").style.display = "none";
+
+    if (event) {
+      event.preventDefault(); // Prevent the default form submission behavior
+    }
+
+    return true;
+  }
+
+  // Function to validate the contact form
+  function validateContactForm() {
+    // Validate email address
+    var emailInput = document.getElementById("exampleFormControlInput1");
+    var emailValue = emailInput.value.trim();
+    var emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+    if (!emailRegex.test(emailValue)) {
+      alert("Please enter a valid email address.");
+      return false;
+    }
+
+    // Validate message length
+    var messageInput = document.getElementById("exampleFormControlTextarea1");
+    var messageValue = messageInput.value.trim();
+
+    if (messageValue.length < 10) {
+      alert("Please enter a message with at least 10 characters.");
+      return false;
+    }
+
+    // If all validations pass, show success message and clear the form
+    alert("Form submitted successfully! Thank you.");
+
+    // Reset the form fields
+    var contactForm = document.getElementById("contactForm");
+    contactForm.reset();
+
+    return true;
+  }
 </script>
-
-
 </body>
-
 </html>

@@ -25,7 +25,6 @@ app.get("/supportPage", (req, res) => {
 const authKey = process.env.MSG91_API_KEY || '381781T3dHu7YQ658dc8e8P1';
 const senderID = process.env.MSG91_SENDER_ID || 'MTCJDI';
 
-
 // Function to send OTP using Msg91
 const sendOTP = async (mobileNumber) => {
   try {
@@ -46,20 +45,23 @@ const sendOTP = async (mobileNumber) => {
     return response.data;
   } catch (error) {
     // Handle error
-    console.error('Error sending OTP:', error.response.data);
-    throw error;
+    console.error('Error sending OTP:', error);
+    throw error; // Propagate the error for centralized error handling
   }
 };
 
-// Route for sending OTP
-app.post("/sendOTP", async (req, res) => {
+// Route for generating and sending OTP
+app.post("/generateOTP", async (req, res) => {
   const { mobileNumber } = req.body;
 
   try {
+    // Generate and send OTP
     const otpResponse = await sendOTP(mobileNumber);
+
     res.json({ success: true, message: "OTP sent successfully", data: otpResponse });
   } catch (error) {
-    res.status(500).json({ success: false, message: "Error sending OTP", error: error.message });
+    console.error('Error generating and sending OTP:', error);
+    res.status(500).json({ success: false, message: "Failed to send OTP. Please try again", error: error.message });
   }
 });
 
