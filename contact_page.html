@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <title>Contact Form</title>
+</head>
+<body>
+
+<div class="container mt-5">
+    <form id="contactForm">
+        <div class="form-row">
+             <!-- First Name -->
+            <div class="form-group col-md-6">
+                <label for="firstName">First Name</label>
+                <input type="text" class="form-control" id="firstName" placeholder="First Name">
+            </div>
+             <!-- Last Name -->
+            <div class="form-group col-md-6">
+                <label for="lastName">Last Name</label>
+                <input type="text" class="form-control" id="lastName" placeholder="Last Name">
+            </div>
+        </div>
+        <!-- Mobile Number -->
+        <div class="form-group">
+            <label for="mobileNumber">Mobile Number</label>
+            <input type="text" class="form-control" id="mobileNumber" placeholder="Mobile Number">
+        </div>
+        <!--  Choose Gender -->
+
+        <div class="form-group">
+            <label for="genderSelect">Select Gender:</label>
+            <select class="form-control" id="genderSelect">
+              <option value="male">Male</option>
+              <option value="female">Female</option>
+            </select>
+          </div>
+        
+          <!-- <button class="btn btn-primary" onclick="submitGender()">Submit</button> -->
+        <!-- Email-ID -->
+        <div class="form-group">
+            <label for="emailId">Email ID</label>
+            <input type="email" class="form-control" id="emailId" placeholder="Email ID">
+        </div>
+        <!-- Password -->
+        <div class="form-group">
+            <label for="password">Password</label>
+            <input type="password" class="form-control" id="password" placeholder="Password">
+        </div>
+        <!-- Confirm Password -->
+        <div class="form-group">
+            <label for="confirmPassword">Confirm Password</label>
+            <input type="password" class="form-control" id="confirmPassword" placeholder="Confirm Password">
+        </div>
+        <button type="button" class="btn btn-primary" onclick="validateAndSubmit()">Submit</button>
+    </form>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.0.7/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+<script>
+    function validateAndSubmit() {
+        // Get values from the form
+        var firstName = document.getElementById('firstName').value.trim();
+        var lastName = document.getElementById('lastName').value.trim();
+        var mobileNumber = document.getElementById('mobileNumber').value.trim();
+        var genderSelect= document.getElementById('genderSelect').value.trim();
+        var emailId = document.getElementById('emailId').value.trim();
+        var password = document.getElementById('password').value;
+        var confirmPassword = document.getElementById('confirmPassword').value;
+
+
+        // Perform client-side validation
+        if (firstName === '' || lastName === '') {
+            alert('First Name and Last Name cannot be empty.');
+            return;
+        }
+
+        if (!isValidMobileNumber(mobileNumber)) {
+            alert('Please enter a valid Mobile Number.');
+            return;
+        }
+
+        if(genderSelect === ''){
+            alert('Please select a gender');
+            return;
+
+        }
+
+        if (!isValidEmail(emailId)) {
+            alert('Please enter a valid Email ID.');
+            return;
+        }
+
+        if (password.length < 8) {
+            alert('Password should be at least 8 characters long.');
+            return;
+        }
+
+        if (password !== confirmPassword) {
+            alert('Password and Confirm Password do not match.');
+            return;
+        }
+
+        // Log the values to the console
+        console.log('Full Name:', firstName + ' ' + lastName);
+        console.log('Mobile Number:', mobileNumber);
+        console.log('Email ID:', emailId);
+        console.log('Password:', password);
+        console.log('Gender:' , genderSelect);
+    }
+
+    function isValidMobileNumber(mobileNumber) {
+        // Use a simple regex to check if the mobile number is valid
+        var regex = /^[0-9]{10}$/;
+        return regex.test(mobileNumber);
+    }
+
+    function isValidEmail(email) {
+        // Use a regex to check if the email is in a valid format
+        var regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        return regex.test(email);
+    }
+    function submitGender() {
+    const selectedGender = document.getElementById('genderSelect').value;
+    alert('Selected Gender: ' + selectedGender);
+  }
+</script>
+
+</body>
+</html>
