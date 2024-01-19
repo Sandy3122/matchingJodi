@@ -1,21 +1,3 @@
-// Variable to store the randomly generated OTP
-var generatedOTP;
-
-// Function to simulate getting OTP (for demonstration purposes)
-function getOTP() {
-  // Generate a random 6-digit OTP
-  generatedOTP = Math.floor(100000 + Math.random() * 900000);
-
-  // Display the OTP
-  alert("OTP sent successfully! Your OTP is: " + generatedOTP);
-
-  // Enable the submit button
-  document.getElementById("submitButton").disabled = false;
-
-  // Assuming you have an input field for OTP, you can set its value
-  document.getElementById("exampleInputOTP").value = "";
-}
-
 // Function to validate the OTP form
 function validateOTPForm(event) {
   // Validation logic
@@ -26,12 +8,6 @@ function validateOTPForm(event) {
   if (mobileNumber === "" || enteredOTP === "") {
     alert("Please enter both mobile number and OTP.");
     return false; // Returning false to prevent form submission
-  }
-
-  // Check if the entered OTP matches the generated OTP
-  if (enteredOTP !== generatedOTP.toString()) {
-    alert("Incorrect OTP. Please enter the correct OTP.");
-    return false;
   }
 
   // Assume that the mobile number and OTP are valid for demonstration purposes
