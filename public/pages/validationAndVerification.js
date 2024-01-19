@@ -1,6 +1,6 @@
 var configuration = {
-  widgetId: "34616c746f61383137363438",
-  tokenAuth: "381781T3dHu7YQ658dc8e8P1",
+  widgetId: process.env.WIDGET_ID || "34616c746f61383137363438",
+  tokenAuth: process.env.TOKEN_AUTH || "381781T3dHu7YQ658dc8e8P1",
   identifier: "phone",
   exposeMethods: "<true | false> (optional)",
   success: (data) => {
