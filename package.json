@@ -11,6 +11,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@firebase/app": "^0.9.26",
     "axios": "^1.6.5",
     "cookie-parser": "^1.4.6",
     "cors": "^2.8.5",

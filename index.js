@@ -5,7 +5,7 @@ const axios = require("axios");
 const cors = require("cors");
 const admin = require("firebase-admin");
 const cookieParser = require("cookie-parser");
-// const { v4: uuidv4 } = require('uuid');
+const { v4: uuidv4 } = require('uuid');
 
 
 
@@ -65,6 +65,9 @@ let counter = 0;
 // Route to handle posting user details to Firebase
 app.post("/sendData", async (req, res) => {
   try {
+    // Log the received data for debugging
+    console.log("Received Data:", req.body);
+
     // Retrieving user details from the request body
     const { phone, name, email, message } = req.body;
 
@@ -72,7 +75,6 @@ app.post("/sendData", async (req, res) => {
     if (!(phone && name && email && message)) {
       return res.status(400).json({ error: "Please fill in all fields." });
     }
-
 
     // Increment counter for generating sequential IDs
     counter += 1;
@@ -86,8 +88,6 @@ app.post("/sendData", async (req, res) => {
     // Set a default status
     const defaultStatus = "pending";
 
-    console.log("Before Firestore Operation");
-
     // Saving the user data to Firestore Database with the custom ID
     await admin.firestore().collection("usersData").doc(sequentialId).set({
       phone,
@@ -98,14 +98,13 @@ app.post("/sendData", async (req, res) => {
       status: defaultStatus,
     });
 
-    console.log("After Firestore Operation");
-
     res.status(200).json({ message: "Data sent successfully." });
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: "Internal Server Error" });
   }
 });
+
 
 
 const PORT = process.env.PORT || 8080;

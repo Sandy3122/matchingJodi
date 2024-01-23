@@ -107,8 +107,6 @@ document.getElementById("supportForm").addEventListener("submit", function (even
     });
 });
 
-// ... (Your existing code)
-
 
 // Function to validate and display the status for an input field
 function validateAndDisplayStatus(field, errorId) {
