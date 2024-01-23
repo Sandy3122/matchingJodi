@@ -5,6 +5,7 @@ const axios = require("axios");
 const cors = require("cors");
 const admin = require("firebase-admin");
 const cookieParser = require("cookie-parser");
+const bodyParser = require("body-parser");
 const { v4: uuidv4 } = require('uuid');
 
 
@@ -21,6 +22,8 @@ dotenv.config();
 // Middleware for json requests
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
+app.use(bodyParser.json()); // Use body-parser middleware
+app.use(bodyParser.urlencoded({ extended: true })); // Use body-parser middleware
 
 // Use cors middleware to handle CORS headers
 app.use(
@@ -58,16 +61,17 @@ app.get("/env", (req, res) => {
   });
 });
 
-
-// Counter for generating sequential IDs
-let counter = 0;
+// Function to generate a numeric-only ID from a UUID
+function generateNumericId() {
+  const uuid = uuidv4();
+  const numericId = parseInt(uuid.replace(/[^0-9]/g, ''), 10);
+  return numericId.toString().substring(0, 7);
+}
 
 // Route to handle posting user details to Firebase
 app.post("/sendData", async (req, res) => {
+  console.log('Testing')
   try {
-    // Log the received data for debugging
-    console.log("Received Data:", req.body);
-
     // Retrieving user details from the request body
     const { phone, name, email, message } = req.body;
 
@@ -76,26 +80,22 @@ app.post("/sendData", async (req, res) => {
       return res.status(400).json({ error: "Please fill in all fields." });
     }
 
-    // Increment counter for generating sequential IDs
-    counter += 1;
+    const customId = 'w' + generateNumericId();
 
-    // Generate a sequential ID like "w1," "w2," ...
-    const sequentialId = `w${counter}`;
+    // Set the default status to "pending"
+    const status = "pending";
 
     // Include a timestamp
     const timestamp = admin.firestore.FieldValue.serverTimestamp();
 
-    // Set a default status
-    const defaultStatus = "pending";
-
     // Saving the user data to Firestore Database with the custom ID
-    await admin.firestore().collection("usersData").doc(sequentialId).set({
+    await admin.firestore().collection("usersData").doc(customId).set({
       phone,
       name,
       email,
       message,
       timestamp,
-      status: defaultStatus,
+      status,
     });
 
     res.status(200).json({ message: "Data sent successfully." });

@@ -2,85 +2,46 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>About Us Page</title>
-    <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>About Us Page</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
-    <form id="supportForm" action="/sendData" method="POST">
-        <div><h1><span style="color:#083362">Support</span> <span style="color: #ff2f68;">Request</span></h1>
-            <p id="note"><strong>Note:</strong> First, Please verify your number</p>
-        </div>
+  <form id="supportForm" action="/sendData" method="POST">
+    <div>
+      <h1><span style="color:#083362">Support</span> <span style="color: #ff2f68;">Request</span></h1>
+      <p id="note"><strong>Note:</strong> First, Please verify your number</p>
+    </div>
 
-        <label id="nameLabel" for="phone">Phone Number:</label>
-        <input type="tel" id="phone" name="phone" maxlength="10" pattern="[0-9]{10}" required
-            oninput="this.value = this.value.replace(/[^0-9]/g, '');">
-        <span id="phoneError" class="error"></span>
-        <a href="#" id="verify-link" onclick="showMsg91Window()">Verify</a>
+    <label id="nameLabel" for="phone">Phone Number:</label>
+    <input type="tel" id="phone" name="phone" maxlength="10" pattern="[0-9]{10}" required
+      oninput="this.value = this.value.replace(/[^0-9]/g, '');">
+    <span id="phoneError" class="error"></span>
+    <a href="#" id="verify-link" onclick="showMsg91Window()">Verify</a>
 
-        <label id="nameLabel" for="name">Name:</label><br>
-        <input type="text" id="name" name="name" required >
-        <span id="nameError" class="error"></span><br>
+    <label id="nameLabel" for="name">Name:</label><br>
+    <input type="text" id="name" name="name"  disabled>
+    <span id="nameError" class="error"></span><br>
 
-        <label for="email">Email:</label><br>
-        <input type="email" id="email" name="email" required >
-        <span id="emailError" class="error"></span><br>
+    <label for="email">Email:</label><br>
+    <input type="email" id="email" name="email"  disabled>
+    <span id="emailError" class="error"></span><br>
 
-        <label id="messageLabel" for="message">Enter Your Message:</label><br>
-        <textarea id="message" name="message" ></textarea>
-        <span id="messageError" class="error"></span><br>
+    <label id="messageLabel" for="message">Enter Your Message:</label><br>
+    <textarea id="message" name="message" disabled></textarea>
+    <span id="messageError" class="error"></span><br>
 
-        <input type="submit" id="submitButton" value="Submit Support Request !" >
-    </form>
+    <button type="submit" id="submitButton" value="Submit Support Request !" disabled>Submit Support Request !</button>
+  </form>
 
 </body>
 <script src="https://control.msg91.com/app/assets/otp-provider/otp-provider.js"></script>
 <!-- Sweet Alert -->
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <!-- Custom Validations And Msg91 Verification -->
-<!-- <script type="text/javascript" src="validationAndVerification.js"></script> -->
-
-<script>
-  // Event listener for form submission
-  document.getElementById("supportForm").addEventListener("submit", function (event) {
-    event.preventDefault();
-
-    // Fetch the form data
-    const formData = new FormData(this);
-
-    // Log the form data for debugging
-    console.log("Form Data:", Object.fromEntries(formData));
-
-    // Send the form data to the server using fetch
-    fetch("/sendData", {
-      method: "POST",
-      body: formData,
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        // Handle the success response here, if needed
-        console.log(data);
-        Swal.fire({
-          icon: "success",
-          title: "Success!",
-          text: "Form submitted successfully. We will get back to you as early as possible.",
-          confirmButtonColor: "#3dc944",
-        });
-      })
-      .catch((error) => {
-        // Handle the error here, if needed
-        console.error("Error submitting form:", error);
-        Swal.fire({
-          icon: "error",
-          title: "Error!",
-          text: "Something went wrong. Please try again later.",
-          confirmButtonColor: "#d33",
-        });
-      });
-  });
-</script>
+<script type="text/javascript" src="validationAndVerification.js"></script>
 
 
 </html>

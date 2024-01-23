@@ -10,11 +10,11 @@ var submitButton = document.getElementById("submitButton");
 var configuration;
 
 // Fetching environment variables from the server
-fetch('/env')
-  .then(response => response.json())
-  .then(env => {
-    console.log(env.WIDGET_ID)
-    console.log(env.TOKEN_AUTH)
+fetch("/env")
+  .then((response) => response.json())
+  .then((env) => {
+    console.log(env.WIDGET_ID);
+    console.log(env.TOKEN_AUTH);
     // Update the configuration with fetched environment variables
     configuration = {
       widgetId: env.WIDGET_ID,
@@ -23,7 +23,6 @@ fetch('/env')
       exposeMethods: "<true | false> (optional)",
       success: (data) => {
         console.log("success response", data);
-        messageField.disabled = false;
         verifyLink.innerText = "Verified";
         verifyLink.style.color = "#3dc944";
         enableFormFields();
@@ -35,7 +34,9 @@ fetch('/env')
       OTP: "<OTP>",
     };
   })
-  .catch(error => console.error('Error fetching environment variables:', error));
+  .catch((error) =>
+    console.error("Error fetching environment variables:", error)
+  );
 
 function showMsg91Window() {
   validateAndDisplayStatus("phone", "phoneError");
@@ -44,7 +45,8 @@ function showMsg91Window() {
 
   if (phone !== "") {
     // Updating the identifier in the configuration with the entered phone number
-    // configuration.identifier = phone;
+    phone = "+91" + phone;
+    configuration.identifier = phone;
     initSendOTP(configuration);
   }
 }
@@ -56,57 +58,72 @@ function enableFormFields() {
   messageField.disabled = false;
 
   // Enables the cursor
-  nameField.style.cursor = 'pointer';
-  emailField.style.cursor = 'pointer';
-  messageField.style.cursor = 'pointer';
+  nameField.style.cursor = "pointer";
+  emailField.style.cursor = "pointer";
+  messageField.style.cursor = "pointer";
 
   // Disable the phone field to prevent number change
   phoneField.disabled = true;
 
   // Enable the submit button
   submitButton.disabled = false;
-  submitButton.style.cursor = 'pointer'; // Enables the cursor 
+  submitButton.style.cursor = "pointer"; // Enables the cursor
 }
 
-
 // Event listener for form submission
-document.getElementById("supportForm").addEventListener("submit", function (event) {
-  event.preventDefault();
+document
+  .getElementById("supportForm")
+  .addEventListener("submit", function (event) {
+    event.preventDefault();
 
-  // Fetch the form data
-  const formData = new FormData(this);
+    // Fetch the form data
+    const formData = new FormData(this);
 
-  // Send the form data to the server using fetch
-  fetch("/sendData", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(Object.fromEntries(formData)),
-  })
-    .then((response) => response.json())
-    .then((data) => {
-      // Handle the success response here, if needed
-      console.log(data);
-      Swal.fire({
-        icon: "success",
-        title: "Success!",
-        text: "Form submitted successfully. We will get back to you as early as possible.",
-        confirmButtonColor: "#3dc944",
-      });
+    // Log the form data for debugging
+    console.log("Form Data:", Object.fromEntries(formData));
+
+    // Send the form data to the server using fetch
+    fetch("/sendData", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        name: nameField.value.trim(),
+        email: emailField.value.trim(),
+        phone: phoneField.value.trim(),
+        message: messageField.value.trim(),
+      }),
     })
-    .catch((error) => {
-      // Handle the error here, if needed
-      console.error("Error submitting form:", error);
-      Swal.fire({
-        icon: "error",
-        title: "Error!",
-        text: "Something went wrong. Please try again later.",
-        confirmButtonColor: "#d33",
-      });
-    });
-});
+      .then((response) => response.json())
+      .then((data) => {
+        // Handle the success response here, if needed
+        console.log(data);
+        Swal.fire({
+          icon: "success",
+          title: "Success!",
+          text: "Form submitted successfully. We will get back to you as early as possible.",
+          confirmButtonColor: "#3dc944",
+        }).then(() => {
+          // Clear the form fields
+          document.getElementById("supportForm").reset();
 
+          // Reload the page
+          location.reload();
+        });
+      })
+
+      .catch((error) => {
+        // Handle the error here, if needed
+        console.error("Error submitting form:", error);
+        Swal.fire({
+          icon: "error",
+          title: "Error!",
+          text: "Something went wrong. Please try again later.",
+          confirmButtonColor: "#d33",
+        });
+      });
+  });
 
 // Function to validate and display the status for an input field
 function validateAndDisplayStatus(field, errorId) {
