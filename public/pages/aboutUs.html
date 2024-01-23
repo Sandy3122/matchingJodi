@@ -4,14 +4,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://control.msg91.com;">
     <title>About Us Page</title>
     <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
-    <form id="supportForm" action="/send-otp" method="post">
-        <h1><span style="color:#083362">Support</span> <span style="color: #ff2f68;">Request</span></h1>
+    <form id="supportForm" action="/sendData" method="POST">
+        <div><h1><span style="color:#083362">Support</span> <span style="color: #ff2f68;">Request</span></h1>
+            <p id="note"><strong>Note:</strong> First, Please verify your number</p>
+        </div>
 
         <label id="nameLabel" for="phone">Phone Number:</label>
         <input type="tel" id="phone" name="phone" maxlength="10" pattern="[0-9]{10}" required
@@ -34,9 +35,11 @@
         <input type="submit" id="submitButton" value="Submit Support Request !" disabled>
     </form>
 
-    <script src="https://control.msg91.com/app/assets/otp-provider/otp-provider.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-    <script src="validationAndVerification.js"></script>
 </body>
+<script src="https://control.msg91.com/app/assets/otp-provider/otp-provider.js"></script>
+<!-- Sweet Alert -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<!-- Custom Validations And Msg91 Verification -->
+<script type="text/javascript" src="validationAndVerification.js"></script>
 
 </html>
