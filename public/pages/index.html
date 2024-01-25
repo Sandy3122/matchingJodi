@@ -1,113 +1,139 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MatchingJodi.Com</title>
+    <link rel="stylesheet" href="style.css">
     <link rel="icon" type="image/x-icon" href="images_icons/logo.jpg">
-<style>
-    @keyframes animation{
-        from {background: url(images_icons/banner1.jpg);background-size:cover;background-position: center};
-        to {background: url(images_icons/banner2.jpg);background-size:cover;background-position: center};
-    }
-    #div_first_page_background_img{
-        height: 100vh;
-        width: 100%;
-        overflow: hidden;
-        box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
-        animation-name: animation;
-        animation-duration: 15s;
-        animation-iteration-count: infinite;
-        
-    }
-
-    td{
-        border-color: #ff2f68;
-        border-style: double;
-        border-radius: 10px;
-        padding: 10px;
-        font-weight: bolder;
-        height: 80px;
-        text-align: center;
-        width: 33.33%;
-    }
-
-    #icon_names{
-        color: #ff2f68;
-        font-size: x-large;
-        text-align: left;
-        line-height: 0.4;
-    }
-
-    #icon_text{
-        color: #083362;
-        font-size: 16px;
-        line-height: 0.4;
-        text-align: left
-    }
-
-</style>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
 </head>
-<body style="margin:0; background-color: #fff;">
-    <div id="div_first_page_background_img">
-        <img src="images_icons/logo.jpg" style="height: 15vh;margin:20px;border-radius: 16px;opacity: 1;float: left;">
-        <h1 style="color: white;margin-top: 50px;opacity: 1;line-height: 0;">MatchingJodi.Com</h1>
-        <h4 style="color: white;font-style:oblique;margin-left: 300px;">Let The New Story Begin...</h4>
-    </div>
-    <div>
-        <h1 style="text-align: center; color:#083362;">
-            What Makes <span style="color: #ff2f68;">MatchingJodi.Com </span> Special
-        </h1>
-        <p style="text-align: center; color: #083362; font-size: 20px; line-height: 0;">
-            Our technology and people ensure complete support to help you find your partner.
-        </p>
-    </div>    
-    <div>
-        <table style="width: 100%;">
-            <tr>
-                <td><img src="images_icons/customer_satisfaction.JPG" style="float: left;">
-                    <p id="icon_names">Customer Satisfaction</p>
-                    <p id="icon_text" style="line-height: 1;">Our Top Priority Is To Ensure Customer Satisfaction.</p>
-                </td>
-                
-                <td><img src="images_icons/trust.JPG" style="float: left;">
-                    <p id="icon_names">Trust</p>
-                    <p id="icon_text" style="line-height: 1;">Contact Real Profiles With Completely Verified Phone Numbers</p>
-                </td>
 
-                <td><img src="images_icons/connect.JPG" style="float: left;">
-                    <p id="icon_names">Connect</p>
-                    <p id="icon_text">Select & Connect With Matches You Like</p>
-                </td>         
-            </tr>
+<body class="text-center">
+    <!-- Navbar Start -->
+    <nav class="navbar navbar-expand-lg fixed-top bg-body-tertiary py-3">
+        <div class="container-fluid">
+            <img src="images_icons/icon.ico" class="mx-2" width="40" height="40" alt="">
+            <a class="navbar-brand" href="/">MatchingJodi</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse flex-end" id="navbarNav">
+                <ul class="navbar-nav text-center">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/#testinomials">Testimonials</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/#services">Services</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/#aboutUs">About Us</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/#contactUs">Contact Us</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <!-- Navbar End -->
 
-            <tr>
-                <td><img src="images_icons/plan_package.JPG" style="float: left;">
-                    <p id="icon_names">Plans & Packages</p>
-                    <p id="icon_text">Plans & Packages That Are Flexible</p>
-                </td>
-            
-                <td><img src="images_icons/personal_advisor.JPG" style="float: left;">
-                    <p id="icon_names">Personal Advisor</p>
-                    <p id="icon_text" style="line-height: 1;">Get Personalized Assistance From Your Own Advisor</p>
-                </td>
-            
-                <td><img src="images_icons/best_matches.JPG" style="float: left;">
-                    <p id="icon_names">Best Matches</p>
-                    <p id="icon_text" style="line-height: 1;">Find Your Ideal Mate</p>
-                </td>
-            </tr>
-      
-        </table>
+    <!-- Main Body Start -->
+    <div>
+        <!-- Hero Section Start -->
+        Explain
+        <div id="carouselExampleInterval" class="carousel slide" data-bs-ride="carousel">
+            <div class="carousel-inner">
+                <div class="carousel-item active" data-bs-interval="10000">
+                    <img src="../images_icons/banner2.jpg" class="d-block w-100" alt="...">
+                </div>
+                <div class="carousel-item" data-bs-interval="2000">
+                    <img src="../images_icons/banner2.jpg" class="d-block w-100" alt="...">
+                </div>
+                <div class="carousel-item">
+                    <img src="../images_icons/banner2.jpg" class="d-block w-100" alt="...">
+                </div>
+            </div>
+            <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleInterval"
+                data-bs-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Previous</span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleInterval"
+                data-bs-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Next</span>
+            </button>
+        </div>
+        <!-- Hero Section End -->
+
+
+        <!-- Testinomials Start -->
+        <div id="testimonials" class="mt-5">
+            <div>
+                Testimonials Section
+            </div>
+        </div>
+
+        <!-- Testinomials End -->
+
+        <!-- Services Section Start -->
+        <div id="services">
+            <div>
+                <h1>
+                    What Makes <span style="color: #ff2f68;">MatchingJodi.Com </span> Special
+                </h1>
+                <span>
+                    Our technology and people ensure complete support to help you find your partner.
+                </span>
+            </div>
+
+            <div>
+                <table class="table table-bordered mt-4">
+                    <!-- Your table content here -->
+                </table>
+            </div>
+
+            <div class="mt-4">
+                <!-- Your additional content here -->
+            </div>
+
+        </div>
+        <!-- Services Section End -->
+
+
+        <!-- About Us Start -->
+        <div id="aboutUs">
+            <div>About Us</div>
+        </div>
+        <!-- About Us End -->
+
+
+        <!-- Contact Us Start -->
+        <section id="contactUs">
+            <div>
+                Contact Us
+            </div>
+        </section>
+        <!-- Contact Us End -->
     </div>
-    <div style="margin-top: 60px;">
-        <img src="images_icons/matchingjodi_logo.png" style="float: left;width:30%;height: 35vh;background-size: cover;margin-left: 20px;">
-        <p><h1 style="color:#083362;margin-left: 600px;">About <span style="color: #ff2f68;"> MatchingJodi.Com</span></h1></p>
-        <p style="text-align: justify; color: #083362; font-size: 20px; line-height: 1.5;margin-left: 650px;margin-right: 110px;">MatchingJodi.com is a well-known Indian matrimonial site. MatchingJodi.com has been assisting happy marriages since 2022 and understands the importance of finding the right mate for marriage. We believe in providing our users with the most convenient matchmaking experience possible by requiring phone number verification and additional details. While the other online matrimonial business connects individuals directly, we also offer specialist Customer Care Support and offline Matches for a more personal connection with prospective brides, grooms, and/or families. We appreciate your visit and hope we can help you find the perfect person. </p>
-    </div><br><br><br><br>
-    <center style="padding: 20px;"><a href="/supportRequest">Support Request</a></center>
-<div >
-    <img src="images_icons/support.png" style="height: 50vh;width: 100%; overflow: hidden;">
-</div>
+    <!-- Main Body End -->
+
+
+    <!-- Footer Section Start -->
+    <footer id="footer">
+        <img src="images_icons/support.png" class="img-fluid">
+    </footer>
+    <!-- Footer Section End -->
+
 </body>
+<!-- BootStrap CDN -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
+    crossorigin="anonymous"></script>
+
 </html>
