@@ -1,9 +1,6 @@
 body {
   font-family: "Roboto", sans-serif;
   background-color: #f5f5f5;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
 }
 
 .navbar-toggler:focus {
@@ -26,7 +23,7 @@ form {
   padding: 30px;
   margin: 0 auto;
   max-width: 500px;
-  margin-top: 15px;
+  margin-top: 80px;
   position: relative;
 }
 
@@ -104,7 +101,7 @@ button:hover {
 /* For verify link within the input tag */
 #verify-link {
   position: absolute;
-  top: 29%;
+  top: 25%;
   right: 8%;
   transform: translateY(-50%);
   text-decoration: none;
