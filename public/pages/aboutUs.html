@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>About Us Page</title>
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+  <!-- Navbar Start -->
+  <nav class="navbar navbar-expand-lg fixed-top bg-body-tertiary pt-3">
+    <div class="container-fluid">
+      <img src="images_icons/icon.ico" class="mx-2" width="40" height="40" alt="">
+      <a class="navbar-brand" href="/" style="color: #000;">MatchingJodi</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+        aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse flex-end" id="navbarNav">
+        <ul class="navbar-nav text-center">
+          <li class="nav-item">
+            <a class="nav-link" href="/#services" style="color: #000;">Services</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/#testimonials" style="color: #000;">Testimonials</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/#aboutUs" style="color: #000;">About Us</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+<!-- Support  Form -->
+  <div>
+    <form id="supportForm" action="/sendData" method="POST">
+      <div>
+        <h1><span style="color:#083362">Support</span> <span style="color: #ff2f68;">Request</span></h1>
+        <p id="note"><strong>Note:</strong> First, Please verify your number</p>
+      </div>
+  
+      <label id="nameLabel" for="phone">Phone Number:</label>
+      <input type="tel" id="phone" name="phone" maxlength="10" pattern="[0-9]{10}" required
+        oninput="this.value = this.value.replace(/[^0-9]/g, '');">
+      <span id="phoneError" class="error"></span>
+      <a href="#" id="verify-link" onclick="showMsg91Window()">Verify</a>
+  
+      <label id="nameLabel" for="name">Name:</label><br>
+      <input type="text" id="name" name="name" disabled>
+      <span id="nameError" class="error"></span><br>
+  
+      <label for="email">Email:</label><br>
+      <input type="email" id="email" name="email" disabled>
+      <span id="emailError" class="error"></span><br>
+  
+      <label id="messageLabel" for="message">Enter Your Message:</label><br>
+      <textarea id="message" name="message" disabled></textarea>
+      <span id="messageError" class="error"></span><br>
+  
+      <button type="submit" id="submitButton" value="Submit Support Request !" disabled>Submit Support Request&nbsp;!</button>
+    </form>
+  </div>
+
+</body>
+<script src="https://control.msg91.com/app/assets/otp-provider/otp-provider.js"></script>
+<!-- Sweet Alert -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<!-- Custom Validations And Msg91 Verification -->
+<script type="text/javascript" src="validationAndVerification.js"></script>
+<!-- BootStrap CDN -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+
+</html>
