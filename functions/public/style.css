@@ -1,3 +1,7 @@
+/* Import styles at the top of your stylesheet */
+@import url('reset.css');
+@import url('typography.css');
+
 body {
   font-family: "Roboto", sans-serif;
   background-color: #f5f5f5;
