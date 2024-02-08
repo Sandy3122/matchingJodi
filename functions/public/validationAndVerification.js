@@ -19,11 +19,11 @@ const handleSuccess = (data) => {
 let configuration;
 
 // Fetching environment variables from the server
-fetch("/env")
+fetch("/support/env")
   .then((response) => response.json())
   .then((env) => {
-    // console.log(env.WIDGET_ID);
-    // console.log(env.TOKEN_AUTH);
+    console.log(env.WIDGET_ID);
+    console.log(env.TOKEN_AUTH);
     // Update the configuration with fetched environment variables
     configuration = {
       widgetId: env.WIDGET_ID,
@@ -43,7 +43,7 @@ fetch("/env")
   );
 
   function showMsg91Window() {
-    alert("testing")
+    alert("testing");
   
     var phone = phoneField.value.trim();
   
@@ -87,7 +87,7 @@ document
     console.log("Form Data:", Object.fromEntries(formData));
 
     // Send the form data to the server using fetch
-    fetch("/sendData", {
+    fetch("/support/sendSupportFormData", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
