@@ -26,11 +26,13 @@ app.use(cors());
 app.use(cookieParser());
 app.use(express.static('public'));
 
-const htmlRoutes = require("./src/routes/index");
+const userRoutes = require("./src/routes/userRoutes");
+const employeeRoutes = require("./src/routes/employeeRoutes");
 const supportRequestFormRoutes = require("./src/routes/supportRequestRoutes");
 const employeeRegistrationRoutes = require('./src/routes/employeeRegistrationRoutes');
 
-app.use("/users", htmlRoutes);
+app.use("/users", userRoutes);
+app.use("/employee", employeeRoutes);
 app.use("/support", supportRequestFormRoutes);
 app.use('/api', employeeRegistrationRoutes);
 

@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/7.1.0/mdb.min.css" rel="stylesheet" />
+    <link rel="icon" type="image/x-icon" href="https://i.postimg.cc/W1qxgjkZ/logo.jpg">
+    <title>Employee Registration Form</title>
+    <style>
+        .gradient-custom {
+            box-shadow: 3px 0px 30px 18px rgba(0, 0, 0, 0.1);
+        }
+
+        .card-registration .select-input.form-control[readonly]:not([disabled]) {
+            font-size: 1rem;
+            line-height: 2.15;
+            padding-left: .75em;
+            padding-right: .75em;
+        }
+
+        .card-registration .select-arrow {
+            top: 13px;
+        }
+
+        .submitBtn {
+            background-color: #ff2f68 !important;
+            outline: none;
+            border: none;
+        }
+
+        .submitBtn:hover {
+            background-color: #45a !important;
+        }
+    </style>
+</head>
+
+<body>
+    <section class="bg-light vh-100 gradient-custom">
+        <div class="container-fluid pt-4 pb-4 h-100">
+            <div class="row justify-content-center align-items-center">
+                <div class="col-12 col-md-12 col-lg-12 col-xl-8">
+                    <div class="mb-2 card shadow-2-strong card-registration" style="border-radius: 15px;">
+                        <div class="card-body">
+                            <h2 class="pb-2 pb-md-0 display-5 text-start fw-bolder" style="color: #ff2f68;">
+                                Employee Registration</h2>
+                            <form action="/api/employee-registration" method="POST" id="employeeRegistrationForm" enctype="multipart/form-data">
+                                <div class="row">
+                                    <div class="col-md-6 col-sm-6 col-lg-6 mb-3">
+
+                                        <div data-mdb-input-init class="form-outline">
+                                            <input type="text" id="firstName" class="form-control form-control-lg"
+                                                oninput="checkInput(this)" name="firstName" required />
+                                            <label class="form-label" for="firstName">First Name</label>
+                                        </div>
+
+                                    </div>
+                                    <div class="col-md-6 col-sm-6 col-lg-6 mb-3">
+
+                                        <div data-mdb-input-init class="form-outline">
+                                            <input type="text" id="lastName" class="form-control form-control-lg"
+                                                oninput="checkInput(this)" name="lastName" required />
+                                            <label class="form-label" for="lastName">Last Name</label>
+                                        </div>
+
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-md-6 col-sm-6 mb-3">
+
+                                        <h6 class="mb-2 pb-1">Gender: </h6>
+
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="radio" name="gender" id="femaleGender"
+                                                value="option1" />
+                                            <label class="form-check-label" for="femaleGender">Female</label>
+                                        </div>
+
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="radio" name="gender" id="maleGender"
+                                                value="option2" />
+                                            <label class="form-check-label" for="maleGender">Male</label>
+                                        </div>
+
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="radio" name="gender" id="otherGender"
+                                                value="option3" />
+                                            <label class="form-check-label" for="otherGender">Other</label>
+                                        </div>
+
+                                    </div>
+
+                                    <div class="col-md-6 col-sm-6 mb-3 d-flex align-items-center">
+                                        <div>
+                                            <h6 class="mb-2 pb-1">Marital Status: </h6>
+
+                                            <div class="form-check form-check-inline">
+                                                <input class="form-check-input" type="radio" name="maritalStatus"
+                                                    id="maritalStatusYes" value="yes" />
+                                                <label class="form-check-label" for="maritalStatusYes">Yes</label>
+                                            </div>
+
+                                            <div class="form-check form-check-inline">
+                                                <input class="form-check-input" type="radio" name="maritalStatus"
+                                                    id="maritalStatusNo" value="no" />
+                                                <label class="form-check-label" for="maritalStatusNo">No</label>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-md-6 col-sm-6 mb-3 pb-2">
+
+                                        <div data-mdb-input-init class="form-outline datepicker w-100">
+                                            <input type="date" class="form-control form-control-lg" name="employeeDOB"
+                                                id="birthdayDate" required />
+                                            <label for="birthdayDate" class="form-label">Date Of Birth</label>
+                                        </div>
+
+                                    </div>
+                                    <div class="col-md-6 col-sm-6 mb-3 pb-2">
+
+                                        <div data-mdb-input-init class="form-outline">
+                                            <input type="email" id="employeeEmail" name="employeeEmail"
+                                                class="form-control form-control-lg" oninput="checkInput(this)"
+                                                required />
+                                            <label class="form-label" for="employeeEmail">Email</label>
+                                        </div>
+
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-md-6 col-sm-6 mb-3 pb-2">
+
+                                        <div data-mdb-input-init class="form-outline">
+                                            <input type="tel" id="phoneNumber" name="employeePhoneNumber"
+                                                class="form-control form-control-lg"
+                                                oninput="this.value = this.value.replace(/[^0-9]/g, ''); checkInput(this);"
+                                                maxlength="10" pattern="[0-9]{10}" required autocomplete="off" />
+                                            <label class="form-label" for="phoneNumber">Phone Number</label>
+                                        </div>
+
+                                    </div>
+                                    <div class="col-md-6 col-sm-6 mb-3 pb-2">
+
+                                        <div data-mdb-input-init class="form-outline">
+                                            <input type="tel" id="employeeEmergencyPhoneNumber"
+                                                class="form-control form-control-lg" name="employeeEmergencyPhoneNumber"
+                                                oninput="this.value = this.value.replace(/[^0-9]/g, ''); checkInput(this);"
+                                                maxlength="10" pattern="[0-9]{10}" required autocomplete="off" />
+                                            <label class="form-label" for="employeeEmergencyPhoneNumber">Emergency Phone
+                                                Number</label>
+                                        </div>
+
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-md-6 col-sm-6 mb-3 pb-2">
+                                        <div data-mdb-input-init class="form-outline">
+                                            <input type="password" id="pin" class="form-control form-control-lg"
+                                                name="pin" oninput="checkInput(this)" required maxlength="4"
+                                                pattern="[0-9]{4}" />
+                                            <label class="form-label" for="pin">4 Digit Pin</label>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-6 col-sm-6 mb-3 pb-2">
+                                        <div data-mdb-input-init class="form-outline">
+                                            <input type="password" id="confirmPin" class="form-control form-control-lg"
+                                                name="confirmPin" oninput="checkInput(this)" required maxlength="4"
+                                                pattern="[0-9]{4}" />
+                                            <label class="form-label" for="confirmPin">Confirm 4 Digit Pin</label>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-12">
+                                        <select class="form-select" name="kycDocumentType"
+                                            id="exampleFormControlSelect1" required>
+                                            <option value="" disabled selected>Select KYC Document</option>
+                                            <option value="aadhar_card">Aadhar Card</option>
+                                            <option value="pan_card">Pan Card</option>
+                                            <option value="driving_license">Driving License</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="row pt-3">
+                                    <div class="col-sm-4 pt-2">
+                                        <label class="form-label" for="kycDocument">Upload KYC Document</label>
+                                        <input type="file" class="form-control" id="kycDocument" name="kycDocument" accept="application/pdf" required />
+                                    </div>
+
+                                    <div class="col-sm-4 pt-2">
+                                        <label class="form-label" for="profilePic">Upload Profile Pic</label>
+                                        <input type="file" class="form-control" id="profilePic" name="employeePhoto" accept="image/jpeg, image/jpg" required />
+                                    </div>
+
+                                    <div class="col-sm-4 pt-2">
+                                        <label class="form-label" for="resume">Upload Resume</label>
+                                        <input type="file" class="form-control" id="resume" name="employeeResume" accept="application/pdf" required />
+
+                                    </div>
+                                </div>
+
+
+                                <div class="row mt-3 pt-2 d-flex justify-content-center">
+                                    <input class="col-6 submitBtn btn btn-primary btn-lg" type="submit"
+                                        value="Submit" />
+                                </div>
+
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</body>
+<!-- BootStrap CDN -->
+<!-- MDB -->
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/7.1.0/mdb.umd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<script>
+    function checkInput(inputField) {
+        if (inputField.value !== '') {
+            inputField.previousElementSibling.classList.add('active');
+        } else {
+            inputField.previousElementSibling.classList.remove('active');
+        }
+    }
+</script>
+<script>
+// Handle form submission
+document.getElementById("employeeRegistrationForm").addEventListener("submit", function (event) {
+    event.preventDefault();
+
+    const formData = new FormData(this);
+
+    fetch("/api/employee-registration", {
+        method: "POST",
+        body: formData
+    })
+    .then(response => response.json())
+    .then(data => {
+        // Check if the response indicates success
+        if (data.message === "Data sent successfully.") {
+            // Display success message using SweetAlert
+            Swal.fire({
+                icon: "success",
+                title: "Success!",
+                text: "Form submitted successfully.",
+                confirmButtonColor: "#3dc944",
+            }).then(() => {
+                // Optionally, perform additional actions after SweetAlert is closed
+                // For example, clear form fields or redirect to another page
+                document.getElementById("employeeRegistrationForm").reset();
+            });
+        } else {
+            // Display error message using SweetAlert
+            Swal.fire({
+                icon: "error",
+                title: "Error!",
+                text: "Failed to submit form. Please try again later.",
+                confirmButtonColor: "#d33",
+            });
+        }
+    })
+    .catch(error => {
+        // Display error message using SweetAlert
+        console.error("Error submitting form:", error);
+        Swal.fire({
+            icon: "error",
+            title: "Error!",
+            text: "Something went wrong. Please try again later.",
+            confirmButtonColor: "#d33",
+        });
+    });
+});
+
+</script>
+
+</html>

@@ -1,11 +1,9 @@
-// employeeRegistrationController.js
 const multer = require("multer");
-const {
-  saveEmployeeRegistrationData,
-} = require("../models/employeeRegistrationModel");
+const { saveEmployeeRegistrationData } = require("../models/employeeRegistrationModel");
 const { generateNumericId } = require("../utilities/generateIds");
 const admin = require("firebase-admin");
 const sharp = require("sharp");
+const bcrypt = require('bcryptjs');
 
 const bucket = admin.storage().bucket();
 const upload = multer({
@@ -17,30 +15,6 @@ async function compressImage(file) {
   return sharp(file.buffer)
     .resize(800) // Adjust the size as needed
     .toBuffer();
-}
-
-async function uploadFile(file, folder) {
-  // Compress image files before uploading
-  if (file.mimetype.startsWith("image/")) {
-    file.buffer = await compressImage(file);
-  }
-
-  return new Promise((resolve, reject) => {
-    const fileUpload = bucket.file(`${folder}/${file.originalname}`);
-    const fileStream = fileUpload.createWriteStream({
-      metadata: { contentType: file.mimetype },
-    });
-
-    fileStream.on("error", (error) => reject(error));
-    fileStream.on("finish", () => {
-      fileUpload
-        .makePublic()
-        .then(() => resolve(fileUpload.publicUrl()))
-        .catch((error) => reject(error));
-    });
-
-    fileStream.end(file.buffer);
-  });
 }
 
 module.exports = {
@@ -70,44 +44,64 @@ module.exports = {
         return res.status(400).send("Files not uploaded");
       }
 
+      const isAdminPanel = req.headers["source"] === "adminPanel";
+
       const employeeId = "e" + generateNumericId();
+
+      // Ensure the employee's folder exists
+     
 
       const {
         firstName,
         lastName,
         gender,
+        employeeDOB,
         maritalStatus,
         employeeEmail,
         employeePhoneNumber,
         employeeEmergencyPhoneNumber,
         pin,
         kycDocumentType,
+        role,
+        designation,
+        joiningDate,
+        accountStatus
       } = req.body;
 
+      const firstNameLowerCase = firstName.toLowerCase();
+      const sanitizedFirstName = firstNameLowerCase.replace(/[^\w\s]/gi, ''); // Remove special characters
+      const employeeFolder = `employees/${employeeId}_${sanitizedFirstName}`;
+
+      await bucket.file(employeeFolder).save('', { resumable: false });
+
       const timestamp = admin.firestore.FieldValue.serverTimestamp();
+
+      // Hashing the pin/password
+      const hashedPin = await bcrypt.hash(pin, 10);
 
       const employeeData = {
         firstName,
         lastName,
-        gender,
-        maritalStatus,
+        gender: gender === "option2" ? "Male" : gender === "option1" ? "Female" : "Other",
+        maritalStatus: maritalStatus === "yes" ? "Yes" : "No",
+        employeeDOB,
         timestamp,
         employeeId,
         employeeEmail,
         employeePhoneNumber,
         employeeEmergencyPhoneNumber,
-        pin,
+        pin: hashedPin,
         kycDocumentType,
+        role: isAdminPanel ? (role || "user") : "user",
+        designation: isAdminPanel ? (designation || "Employee") : "employee",
+        joiningDate: joiningDate ? new Date(joiningDate) : timestamp, // Assuming joiningDate is a date string
+        accountStatus: isAdminPanel ? (accountStatus || "Active") : "inactive"
       };
 
-      const employeePhoto = files.employeePhoto[0];
-      const employeeResume = files.employeeResume[0];
-      const kycDocument = files.kycDocument[0];
-
       try {
-        const photoUrl = await uploadFile(employeePhoto, "employeePhotos");
-        const resumeUrl = await uploadFile(employeeResume, "employeeResumes");
-        const kycDocumentUrl = await uploadFile(kycDocument, "kycDocuments");
+        const photoUrl = await uploadFile(files.employeePhoto[0], employeeFolder, employeeId, "employeeProfilePic");
+        const resumeUrl = await uploadFile(files.employeeResume[0], employeeFolder, employeeId, "employeeResume");
+        const kycDocumentUrl = await uploadFile(files.kycDocument[0], employeeFolder, employeeId, "kycDocument", kycDocumentType);
 
         employeeData.photoUrl = photoUrl;
         employeeData.resumeUrl = resumeUrl;
@@ -115,7 +109,7 @@ module.exports = {
 
         await saveEmployeeRegistrationData(employeeId, employeeData);
 
-        res.status(200).json(employeeData);
+        return res.status(200).json({ message: "Data sent successfully." });
       } catch (error) {
         console.error("Error uploading files or saving data:", error);
         res.status(500).json({ error: "Error uploading files or saving data" });
@@ -123,3 +117,40 @@ module.exports = {
     });
   },
 };
+
+async function uploadFile(file, folder, employeeId, fileType, kycDocumentType) {
+  // Compress image files before uploading
+  if (file.mimetype.startsWith("image/")) {
+    file.buffer = await compressImage(file);
+  }
+
+  let fileName;
+  if (fileType === "employeeProfilePic") {
+    fileName = `${employeeId}_profile_pic.${file.originalname.split('.').pop()}`;
+  } else if (fileType === "employeeResume") {
+    fileName = `${employeeId}_resume.${file.originalname.split('.').pop()}`;
+  } else if (fileType === "kycDocument") {
+    fileName = `${employeeId}_${kycDocumentType}.${file.originalname.split('.').pop()}`;
+  } else {
+    fileName = file.originalname;
+  }
+
+  const filePath = `${folder}/${fileName}`;
+
+  return new Promise((resolve, reject) => {
+    const fileUpload = bucket.file(filePath);
+    const fileStream = fileUpload.createWriteStream({
+      metadata: { contentType: file.mimetype }, // Ensure contentType is set correctly
+    });
+
+    fileStream.on("error", (error) => reject(error));
+    fileStream.on("finish", () => {
+      fileUpload
+        .makePublic()
+        .then(() => resolve(fileUpload.publicUrl()))
+        .catch((error) => reject(error));
+    });
+
+    fileStream.end(file.buffer);
+  });
+}
