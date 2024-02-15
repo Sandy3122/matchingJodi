@@ -30,11 +30,15 @@ const userRoutes = require("./src/routes/userRoutes");
 const employeeRoutes = require("./src/routes/employeeRoutes");
 const supportRequestFormRoutes = require("./src/routes/supportRequestRoutes");
 const employeeRegistrationRoutes = require('./src/routes/employeeRegistrationRoutes');
+const employeeSearchRoutes = require('./src/routes/employeeSearchRoutes'); // Import employee search routes
+const getAllEmployees = require('./src/routes/getAllEmployeesRoutes'); // Import employee search routes
 
 app.use("/users", userRoutes);
 app.use("/employee", employeeRoutes);
 app.use("/support", supportRequestFormRoutes);
 app.use('/api', employeeRegistrationRoutes);
+app.use('/api', employeeSearchRoutes); // Use employee search routes
+app.use('/api', getAllEmployees); // Use employee search routes
 
 const PORT = process.env.PORT || 8080;
 app.listen(PORT, () => {

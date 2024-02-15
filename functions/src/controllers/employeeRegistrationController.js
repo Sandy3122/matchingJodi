@@ -4,6 +4,7 @@ const { generateNumericId } = require("../utilities/generateIds");
 const admin = require("firebase-admin");
 const sharp = require("sharp");
 const bcrypt = require('bcryptjs');
+const { PDFDocument } = require('pdf-lib');
 
 const bucket = admin.storage().bucket();
 const upload = multer({
@@ -13,8 +14,63 @@ const upload = multer({
 
 async function compressImage(file) {
   return sharp(file.buffer)
-    .resize(800) // Adjust the size as needed
+    .resize({ width: 600 }) // Resize to a maximum width of 600 pixels
+    .jpeg({ quality: 70 }) // Compress and convert to JPEG format with 70% quality
     .toBuffer();
+}
+
+async function compressPDF(file) {
+  const pdfDoc = await PDFDocument.load(file.buffer);
+  const pdfBytes = await pdfDoc.save();
+  return pdfBytes;
+}
+
+async function compressFile(file, fileType) {
+  if (fileType === "application/pdf") {
+    return compressPDF(file);
+  } else if (fileType.startsWith("image/")) {
+    return compressImage(file);
+  } else {
+    return file.buffer;
+  }
+}
+
+async function uploadFile(file, folder, employeeId, fileType, kycDocumentType) {
+  try {
+    const compressedBuffer = await compressFile(file, file.mimetype);
+
+    if (compressedBuffer.length === 0) {
+      throw new Error("Empty file buffer after compression");
+    }
+
+    const documentName = fileType === "employeeProfilePic" ? "profile_pic" :
+                         fileType === "employeeResume" ? "resume" :
+                         `${kycDocumentType}`;
+
+    const fileName = `${employeeId}_${documentName}.${file.originalname.split('.').pop()}`;
+    const filePath = `${folder}/${fileName}`;
+
+    const fileUpload = bucket.file(filePath);
+
+    // Create the file
+    const fileStream = fileUpload.createWriteStream({
+      metadata: { contentType: file.mimetype },
+    });
+
+    await new Promise((resolve, reject) => {
+      fileStream.on("error", (error) => reject(error));
+      fileStream.on("finish", () => {
+        fileUpload.makePublic()
+          .then(() => resolve(fileUpload.publicUrl()))
+          .catch((error) => reject(error));
+      });
+      fileStream.end(compressedBuffer);
+    });
+
+    return fileUpload.publicUrl();
+  } catch (error) {
+    throw error;
+  }
 }
 
 module.exports = {
@@ -25,7 +81,7 @@ module.exports = {
       { name: "kycDocument", maxCount: 1 },
     ])(req, res, async (err) => {
       if (err) {
-        // Check if the error is due to file size limit exceeded
+        // Handle file upload errors
         if (err.code === "LIMIT_FILE_SIZE") {
           return res.status(400).send("File size limit exceeded (max 2MB)");
         }
@@ -35,21 +91,14 @@ module.exports = {
 
       const files = req.files;
 
-      if (
-        !files ||
-        !files.employeePhoto ||
-        !files.employeeResume ||
-        !files.kycDocument
-      ) {
+      // Check if any files were uploaded
+      if (!files || !files.employeePhoto || !files.employeeResume || !files.kycDocument) {
         return res.status(400).send("Files not uploaded");
       }
 
       const isAdminPanel = req.headers["source"] === "adminPanel";
 
       const employeeId = "e" + generateNumericId();
-
-      // Ensure the employee's folder exists
-     
 
       const {
         firstName,
@@ -68,37 +117,42 @@ module.exports = {
         accountStatus
       } = req.body;
 
-      const firstNameLowerCase = firstName.toLowerCase();
-      const sanitizedFirstName = firstNameLowerCase.replace(/[^\w\s]/gi, ''); // Remove special characters
-      const employeeFolder = `employees/${employeeId}_${sanitizedFirstName}`;
-
-      await bucket.file(employeeFolder).save('', { resumable: false });
-
-      const timestamp = admin.firestore.FieldValue.serverTimestamp();
-
-      // Hashing the pin/password
-      const hashedPin = await bcrypt.hash(pin, 10);
-
-      const employeeData = {
-        firstName,
-        lastName,
-        gender: gender === "option2" ? "Male" : gender === "option1" ? "Female" : "Other",
-        maritalStatus: maritalStatus === "yes" ? "Yes" : "No",
-        employeeDOB,
-        timestamp,
-        employeeId,
-        employeeEmail,
-        employeePhoneNumber,
-        employeeEmergencyPhoneNumber,
-        pin: hashedPin,
-        kycDocumentType,
-        role: isAdminPanel ? (role || "user") : "user",
-        designation: isAdminPanel ? (designation || "Employee") : "employee",
-        joiningDate: joiningDate ? new Date(joiningDate) : timestamp, // Assuming joiningDate is a date string
-        accountStatus: isAdminPanel ? (accountStatus || "Active") : "inactive"
-      };
+      // Ensure the employee's folder exists
+      const employeeFolder = `employees/${employeeId}`;
 
       try {
+        const timestamp = admin.firestore.FieldValue.serverTimestamp();
+
+        // Hashing the pin/password
+        const hashedPin = await bcrypt.hash(pin, 10);
+
+        // Convert relevant fields to lowercase
+        const lowerCaseFirstName = firstName.toLowerCase();
+        const lowerCaseLastName = lastName.toLowerCase();
+        const lowerCaseGender = gender.toLowerCase();
+        const lowerCaseEmployeeEmail = employeeEmail.toLowerCase();
+        const lowerCaseKycDocumentType = kycDocumentType.toLowerCase();
+        const lowerCaseMaritalStatus = maritalStatus.toLowerCase();
+
+        const employeeData = {
+          firstName: lowerCaseFirstName,
+          lastName: lowerCaseLastName,
+          gender: lowerCaseGender,
+          maritalStatus: lowerCaseMaritalStatus,
+          employeeDOB,
+          timestamp,
+          employeeId,
+          employeeEmail: lowerCaseEmployeeEmail,
+          employeePhoneNumber,
+          employeeEmergencyPhoneNumber,
+          pin: hashedPin,
+          kycDocumentType: lowerCaseKycDocumentType,
+          role: isAdminPanel ? (role || "user") : "user",
+          designation: isAdminPanel ? (designation || "Employee") : "employee",
+          joiningDate: joiningDate ? new Date(joiningDate) : timestamp,
+          accountStatus: isAdminPanel ? (accountStatus || "Active") : "inactive"
+        };
+
         const photoUrl = await uploadFile(files.employeePhoto[0], employeeFolder, employeeId, "employeeProfilePic");
         const resumeUrl = await uploadFile(files.employeeResume[0], employeeFolder, employeeId, "employeeResume");
         const kycDocumentUrl = await uploadFile(files.kycDocument[0], employeeFolder, employeeId, "kycDocument", kycDocumentType);
@@ -112,45 +166,8 @@ module.exports = {
         return res.status(200).json({ message: "Data sent successfully." });
       } catch (error) {
         console.error("Error uploading files or saving data:", error);
-        res.status(500).json({ error: "Error uploading files or saving data" });
+        return res.status(500).json({ error: "Error uploading files or saving data" });
       }
     });
   },
 };
-
-async function uploadFile(file, folder, employeeId, fileType, kycDocumentType) {
-  // Compress image files before uploading
-  if (file.mimetype.startsWith("image/")) {
-    file.buffer = await compressImage(file);
-  }
-
-  let fileName;
-  if (fileType === "employeeProfilePic") {
-    fileName = `${employeeId}_profile_pic.${file.originalname.split('.').pop()}`;
-  } else if (fileType === "employeeResume") {
-    fileName = `${employeeId}_resume.${file.originalname.split('.').pop()}`;
-  } else if (fileType === "kycDocument") {
-    fileName = `${employeeId}_${kycDocumentType}.${file.originalname.split('.').pop()}`;
-  } else {
-    fileName = file.originalname;
-  }
-
-  const filePath = `${folder}/${fileName}`;
-
-  return new Promise((resolve, reject) => {
-    const fileUpload = bucket.file(filePath);
-    const fileStream = fileUpload.createWriteStream({
-      metadata: { contentType: file.mimetype }, // Ensure contentType is set correctly
-    });
-
-    fileStream.on("error", (error) => reject(error));
-    fileStream.on("finish", () => {
-      fileUpload
-        .makePublic()
-        .then(() => resolve(fileUpload.publicUrl()))
-        .catch((error) => reject(error));
-    });
-
-    fileStream.end(file.buffer);
-  });
-}
