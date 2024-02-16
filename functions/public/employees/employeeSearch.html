@@ -9,6 +9,7 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- Custom CSS -->
     <style>
+        /* Custom CSS */
         .file-box {
             border: 1px solid #ccc;
             padding: 10px;
@@ -24,26 +25,53 @@
             max-width: 100%;
             max-height: 100%;
         }
+
+        /* Override default input focus outline */
+        .form-control:focus {
+            outline: none;
+            box-shadow: none;
+        }
+
+        /* Loading animation
+        .loader {
+            border: 4px solid #f3f3f3;
+            border-radius: 50%;
+            border-top: 4px solid #3498db;
+            width: 30px;
+            height: 30px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto;
+            margin-top: 20px;
+        }
+    
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        } */
     </style>
+
 </head>
 
 <body>
 
-    <div class="container m-5 ">
-        <h1>Employee Search</h1>
+    <div class="container mt-5">
+        <h1 class="text-center">Employee Search</h1>
         <!-- Search Bar -->
         <div class="input-group mb-3">
             <input type="text" class="form-control" id="searchInput"
                 placeholder="Search by First Name, Last Name, or Employee ID">
             <button class="btn btn-primary" id="searchBtn">Search</button>
         </div>
+        <!-- Loading animation -->
+        <!-- <div id="loadingIndicator" class="loader d-none"></div> -->
         <!-- Container to hold employee data -->
-        <div id="userDataContainer"></div>
+        <div id="userDataContainer" class="m-3"></div>
     </div>
 
     <!-- Bootstrap JS and jQuery -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <!-- Custom JavaScript -->
     <script>
@@ -53,20 +81,42 @@
                 var query = $("#searchInput").val();
                 console.log("Query:", query); // Check the value of query
 
+                // Show loading animation
+                Swal.fire({
+                    title: 'Loading',
+                    html: 'Searching for employees...',
+                    allowOutsideClick: false,
+                    showConfirmButton: false,
+                    onBeforeOpen: () => {
+                        Swal.showLoading();
+                    }
+                });
+
+                // Clear previous search results
+                $("#userDataContainer").empty();
+
                 // AJAX request to search for employees
                 $.ajax({
                     url: "/api/search-employees",
                     type: "GET",
                     data: { query: query },
                     success: function (data) {
+                        // Close loading animation
+                        Swal.close();
                         displayEmployeeData(data);
                     },
                     error: function (xhr, status, error) {
-                        alert("Error: " + error);
+                        // Close loading animation
+                        Swal.close();
+                        // Display error message with SweetAlert
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error',
+                            text: 'An error occurred while searching for employees: ' + error
+                        });
                     }
                 });
             });
-
 
 
             // Function to format date and time
@@ -108,7 +158,7 @@
                     fileBoxes.append(fileBoxHtml);
 
                     // Append details and files to the user container
-                    userContainer.append("<h2>Employee " + (index + 1) + "</h2>");
+                    userContainer.append("<h2 class='text-center'>Employee " + (index + 1) + "</h2>");
                     userContainer.append(userDetailsTable);
                     userContainer.append(fileBoxes);
 
