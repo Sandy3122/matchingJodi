@@ -1,3 +1,4 @@
+// employeeRegistrationController.js
 const multer = require("multer");
 const { saveEmployeeRegistrationData } = require("../models/employeeRegistrationModel");
 const { generateNumericId } = require("../utilities/generateIds");
@@ -5,6 +6,9 @@ const admin = require("firebase-admin");
 const sharp = require("sharp");
 const bcrypt = require('bcryptjs');
 const { PDFDocument } = require('pdf-lib');
+const jwt = require('jsonwebtoken');
+
+const secretKey = process.env.SECRET_KEY
 
 const bucket = admin.storage().bucket();
 const upload = multer({
@@ -163,7 +167,10 @@ module.exports = {
 
         await saveEmployeeRegistrationData(employeeId, employeeData);
 
-        return res.status(200).json({ message: "Data sent successfully." });
+        // Generate JWT token
+        const token = jwt.sign({ employeeId }, secretKey, { expiresIn: '30m' }); // Replace 'your_secret_key' with your actual secret key
+
+        return res.status(200).json({ message: "Data sent successfully.", token });
       } catch (error) {
         console.error("Error uploading files or saving data:", error);
         return res.status(500).json({ error: "Error uploading files or saving data" });
