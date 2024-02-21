@@ -1,174 +1,131 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Employee Search</title>
-    <!-- Bootstrap CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
-    <!-- Custom CSS -->
-    <style>
-        /* Custom CSS */
-        .file-box {
-            border: 1px solid #ccc;
-            padding: 10px;
-            margin-top: 10px;
-            width: 150px;
-            height: 150px;
-            overflow: hidden;
-        }
-
-        .file-preview {
-            width: 100%;
-            height: auto;
-            max-width: 100%;
-            max-height: 100%;
-        }
-
-        /* Override default input focus outline */
-        .form-control:focus {
-            outline: none;
-            box-shadow: none;
-        }
-
-        /* Loading animation
-        .loader {
-            border: 4px solid #f3f3f3;
-            border-radius: 50%;
-            border-top: 4px solid #3498db;
-            width: 30px;
-            height: 30px;
-            animation: spin 1s linear infinite;
-            margin: 0 auto;
-            margin-top: 20px;
-        }
-    
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        } */
-    </style>
-
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" type="image/x-icon" href="https://i.postimg.cc/W1qxgjkZ/logo.jpg">
+  <title>Employee Search</title>
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- jQuery -->
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <style>
+    /* Add your custom styles here */
+  </style>
 </head>
-
 <body>
-
-    <div class="container mt-5">
-        <h1 class="text-center">Employee Search</h1>
-        <!-- Search Bar -->
-        <div class="input-group mb-3">
-            <input type="text" class="form-control" id="searchInput"
-                placeholder="Search by First Name, Last Name, or Employee ID">
-            <button class="btn btn-primary" id="searchBtn">Search</button>
-        </div>
-        <!-- Loading animation -->
-        <!-- <div id="loadingIndicator" class="loader d-none"></div> -->
-        <!-- Container to hold employee data -->
-        <div id="userDataContainer" class="m-3"></div>
+  <div class="container">
+    <div style="float: right;">
+      <a class="text-decoration-none link" href="/api/employee-logout">Log Out</a>
     </div>
+    <h1 class="mt-5">Employee Search</h1>
+    <div class="mb-3">
+      <input type="text" id="searchInput" class="form-control" placeholder="Search Employees">
+    </div>
+    <button onclick="searchEmployees()" class="btn btn-primary">Search</button>
+    <div id="userDataContainer" class="mt-4"></div>
+  </div>
 
-    <!-- Bootstrap JS and jQuery -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <!-- Bootstrap JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    // Function to format date and time
+    function formatDateTime(dateTime) {
+      const date = new Date(dateTime._seconds * 1000);
+      const formattedDate = date.toLocaleDateString();
+      const formattedTime = date.toLocaleTimeString();
+      return formattedDate + " " + formattedTime;
+    }
 
-    <!-- Custom JavaScript -->
-    <script>
-        $(document).ready(function () {
-            // Function to handle employee search
-            $("#searchBtn").click(function () {
-                var query = $("#searchInput").val();
-                console.log("Query:", query); // Check the value of query
+    // Function to display employee data and documents
+    function displayEmployeeData(employees) {
+      $("#userDataContainer").empty();
 
-                // Show loading animation
-                Swal.fire({
-                    title: 'Loading',
-                    html: 'Searching for employees...',
-                    allowOutsideClick: false,
-                    showConfirmButton: false,
-                    onBeforeOpen: () => {
-                        Swal.showLoading();
-                    }
-                });
+      employees.forEach(function (employee, index) {
+        // Create a new container for each employee
+        var userContainer = $("<div class='container mt-3'></div>");
 
-                // Clear previous search results
-                $("#userDataContainer").empty();
-
-                // AJAX request to search for employees
-                $.ajax({
-                    url: "/api/employee-search",
-                    type: "GET",
-                    data: { query: query },
-                    success: function (data) {
-                        // Close loading animation
-                        Swal.close();
-                        displayEmployeeData(data);
-                    },
-                    error: function (xhr, status, error) {
-                        // Close loading animation
-                        Swal.close();
-                        // Display error message with SweetAlert
-                        Swal.fire({
-                            icon: 'error',
-                            title: 'Error',
-                            text: 'An error occurred while searching for employees: ' + error
-                        });
-                    }
-                });
-            });
-
-
-            // Function to format date and time
-            function formatDateTime(dateTime) {
-                const date = new Date(dateTime._seconds * 1000);
-                const formattedDate = date.toLocaleDateString();
-                const formattedTime = date.toLocaleTimeString();
-                return formattedDate + ' ' + formattedTime;
+        // Append employee details to the container
+        var userDetailsTable = $("<table class='table table-striped'></table>");
+        var userDetailsHtml =
+          "<thead><tr><th>Field</th><th>Value</th></tr></thead><tbody>";
+        for (const [key, value] of Object.entries(employee)) {
+          if (
+            key !== "kycDocumentUrl" &&
+            key !== "resumeUrl" &&
+            key !== "photoUrl" &&
+            key !== "pin"
+          ) {
+            if (key === "joiningDate" || key === "timestamp") {
+              userDetailsHtml +=
+                "<tr><td>" +
+                key +
+                "</td><td>" +
+                formatDateTime(value) +
+                "</td></tr>";
+            } else {
+              userDetailsHtml +=
+                "<tr><td>" + key + "</td><td>" + value + "</td></tr>";
             }
+          }
+        }
+        userDetailsHtml += "</tbody>";
+        userDetailsTable.append(userDetailsHtml);
 
-            // Function to display employee data and documents
-            function displayEmployeeData(employees) {
-                $("#userDataContainer").empty();
+        // Append file boxes with previews
+        var fileBoxes = $("<div class='row m-2 pb-5 d-flex justify-content-around'></div>");
+        var fileBoxHtml =
+    "<div class='col-4' style='width: 150px;'><div class='file-box' style='width: 150px; height: 150px'><h5>KYC Document</h5><a href='" +
+    employee.kycDocumentUrl +
+    "' target='_blank'><img src='https://upload.wikimedia.org/wikipedia/commons/thumb/8/87/PDF_file_icon.svg/1200px-PDF_file_icon.svg.png' class='file-preview' style='width: 100%; height: 100%;' alt='KYC Document'></a></div></div>";
+fileBoxHtml +=
+    "<div class='col-4' style='width: 150px;'><div class='file-box' style='width: 150px; height: 150px'><h5>Profile Photo</h5><a href='" +
+    employee.photoUrl +
+    "' target='_blank'><img src='" +
+    employee.photoUrl +
+    "' class='file-preview' style='width: 100%; height: 100%;' alt='Profile Photo'></a></div></div>";
+fileBoxHtml +=
+    "<div class='col-4' style='width: 150px;'><div class='file-box' style='width: 150px; height: 150px'><h5>Resume</h5><a href='" +
+    employee.resumeUrl +
+    "' target='_blank'><img src='https://upload.wikimedia.org/wikipedia/commons/thumb/8/87/PDF_file_icon.svg/1200px-PDF_file_icon.svg.png' class='file-preview' style='width: 100%; height: 100%;' alt='Resume'></a></div></div>";
+fileBoxes.append(fileBoxHtml);
 
-                employees.forEach(function (employee, index) {
-                    // Create a new container for each employee
-                    var userContainer = $("<div class='container mt-3'></div>");
+        // Append details and files to the user container
+        userContainer.append(
+          "<h2 class='text-center'>Employee " + (index + 1) + "</h2>"
+        );
+        userContainer.append(userDetailsTable);
+        userContainer.append(fileBoxes);
 
-                    // Append employee details to the container
-                    var userDetailsTable = $("<table class='table table-striped'></table>");
-                    var userDetailsHtml = "<thead><tr><th>Field</th><th>Value</th></tr></thead><tbody>";
-                    for (const [key, value] of Object.entries(employee)) {
-                        if (key !== 'kycDocumentUrl' && key !== 'resumeUrl' && key !== 'photoUrl' && key !== 'pin') {
-                            if (key === 'joiningDate' || key === 'timestamp') {
-                                userDetailsHtml += "<tr><td>" + key + "</td><td>" + formatDateTime(value) + "</td></tr>";
-                            } else {
-                                userDetailsHtml += "<tr><td>" + key + "</td><td>" + value + "</td></tr>";
-                            }
-                        }
-                    }
-                    userDetailsHtml += "</tbody>";
-                    userDetailsTable.append(userDetailsHtml);
+        // Append the user container to the main container
+        $("#userDataContainer").append(userContainer);
+      });
+    }
 
-                    // Append file boxes with previews
-                    var fileBoxes = $("<div class='row'></div>");
-                    var fileBoxHtml = "<div class='col-4'><div class='file-box'><h5>KYC Document</h5><a href='" + employee.kycDocumentUrl + "' target='_blank'><img src='https://upload.wikimedia.org/wikipedia/commons/thumb/8/87/PDF_file_icon.svg/1200px-PDF_file_icon.svg.png' class='file-preview' alt='KYC Document'></a></div></div>";
-                    fileBoxHtml += "<div class='col-4'><div class='file-box'><h5>Profile Photo</h5><a href='" + employee.photoUrl + "' target='_blank'><img src='" + employee.photoUrl + "' class='file-preview' alt='Profile Photo'></a></div></div>";
-                    fileBoxHtml += "<div class='col-4'><div class='file-box'><h5>Resume</h5><a href='" + employee.resumeUrl + "' target='_blank'><img src='https://upload.wikimedia.org/wikipedia/commons/thumb/8/87/PDF_file_icon.svg/1200px-PDF_file_icon.svg.png' class='file-preview' alt='Resume'></a></div></div>";
-                    fileBoxes.append(fileBoxHtml);
+    // Function to search employees
+    function searchEmployees() {
+      const searchTerm = document.getElementById('searchInput').value.trim();
 
-                    // Append details and files to the user container
-                    userContainer.append("<h2 class='text-center'>Employee " + (index + 1) + "</h2>");
-                    userContainer.append(userDetailsTable);
-                    userContainer.append(fileBoxes);
+      if (!searchTerm) {
+        alert("Please enter a search term.");
+        return;
+      }
 
-                    // Append the user container to the main container
-                    $("#userDataContainer").append(userContainer);
-                });
-            }
+      fetch(`/api/employee-search?query=${searchTerm}`)
+        .then(response => {
+          if (!response.ok) {
+            throw new Error('Network response was not ok');
+          }
+          return response.json();
+        })
+        .then(data => {
+          displayEmployeeData(data);
+        })
+        .catch(error => {
+          console.error('There was a problem with the fetch operation:', error);
+          alert('There was an error fetching data. Please try again later.');
         });
-    </script>
-
+    }
+  </script>
 </body>
-
 </html>

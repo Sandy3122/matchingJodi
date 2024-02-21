@@ -3,7 +3,7 @@ const admin = require('firebase-admin');
 const db = admin.firestore();
 
 module.exports = {
-  searchEmployees: async function(req, res) {
+  getAllEmployees: async function(req, res) {
     try {
       // Retrieve all employee records
       const snapshot = await db.collection('employeeRegistrationData').get();
