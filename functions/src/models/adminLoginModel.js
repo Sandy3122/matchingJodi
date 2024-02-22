@@ -1,13 +1,9 @@
 const admin = require("firebase-admin");
-const adminCollection = admin.firestore().collection('admins');
 
 async function getAdminByPhoneNumber(phoneNumber) {
     try {
-        // Trim spaces from the provided phone number
-        const formattedPhoneNumber = phoneNumber.trim();
-
-        // Query the database using the formatted phone number
-        const querySnapshot = await adminCollection.where('adminPhoneNumber', '==', formattedPhoneNumber).limit(1).get();
+        const adminCollection = admin.firestore().collection('admins'); // Moved inside the function to ensure a fresh reference
+        const querySnapshot = await adminCollection.where('adminPhoneNumber', '==', phoneNumber).limit(1).get();
         if (!querySnapshot.empty) {
             const adminDoc = querySnapshot.docs[0];
             const adminData = adminDoc.data();

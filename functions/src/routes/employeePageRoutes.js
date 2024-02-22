@@ -47,10 +47,4 @@ router.get("/employee-search", (req, res) => {
   res.sendFile(path.join(__dirname, "..", "..", "public", "employees", "employeeSearch.html"));
 });
 
-
-// Home Page route
-router.get("/getall-employees", (req, res) => {
-  res.sendFile(path.join(__dirname, "..", "..", "public", "employees", "getAllEmployees.html"));
-});
-
 module.exports = router;

@@ -22,9 +22,9 @@ module.exports = {
         return res.status(401).json({ message: 'Invalid phone number or PIN.' });
       }
   
-      // Generate JWT token
-      const token = jwt.sign({ id: admin.id }, secretKey, { expiresIn: '30m' });
-  
+      // Generate JWT token with user type as 'admin'
+      const token = jwt.sign({ id: admin.id, userType: 'admin' }, secretKey, { expiresIn: '30m' });
+
       // Store token in session or response body as needed
       req.session.token = token;
   
