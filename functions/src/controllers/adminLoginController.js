@@ -42,10 +42,13 @@ module.exports = {
 
   // Admin Logout route (if needed)
   handleAdminLogout: function(req, res) {
-    // Clear the token from the session or any other storage mechanism used
-    delete req.session.token;
-
-    // Redirect or send response as needed
-    res.redirect('/admin/admin-login');
+    // Clear the token from the session
+    req.session.destroy(err => {
+      if (err) {
+        console.error('Error destroying session:', err);
+        return res.status(500).json({ message: 'Internal server error' });
+      }
+      res.redirect('/admin/admin-login');
+    });
   }
 };

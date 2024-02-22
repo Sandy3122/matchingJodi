@@ -9,9 +9,8 @@ const employeeAuthMiddleware = (req, res, next) => {
 
     // Check if token is missing
     if (!token) {
-        // return res.status(403).json({ auth: false, message: "Token not provided." });
-        // If token is missing, redirect to the employee login page
-        return res.redirect('/employee/employee-login');
+        return res.status(403).json({ auth: false, message: "Token not provided." });
+        
     }
 
     // Verify the token
