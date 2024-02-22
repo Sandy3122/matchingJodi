@@ -7,6 +7,8 @@ const sharp = require("sharp");
 const bcrypt = require('bcryptjs');
 const { PDFDocument } = require('pdf-lib');
 const jwt = require('jsonwebtoken');
+const { checkExistingUserByEmail, checkExistingUserByMobileNumber } = require("../utilities/userExistenceCheck");
+
 
 const secretKey = process.env.SECRET_KEY
 
@@ -125,6 +127,20 @@ module.exports = {
       const employeeFolder = `employees/${employeeId}`;
 
       try {
+
+        // Check if the user already exists with the provided email
+        const emailExists = await checkExistingUserByEmail(employeeEmail);
+        if (emailExists) {
+          return res.status(401).json({ message: "User already exists with this email." });
+        }
+        
+        // Check if the user already exists with the provided mobile number
+        const mobileNumberExists = await checkExistingUserByMobileNumber(employeePhoneNumber);
+        if (mobileNumberExists) {
+          return res.status(401).json({ message: "User already exists with this mobile number." });
+        }
+        
+
         const timestamp = admin.firestore.FieldValue.serverTimestamp();
 
         // Hashing the pin/password

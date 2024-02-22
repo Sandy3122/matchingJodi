@@ -22,7 +22,8 @@ document.getElementById("employeeLoginForm").addEventListener("submit", async fu
             Swal.fire({
                 icon: 'success',
                 title: 'Login Successful',
-                text: data.message
+                text: data.message,
+                confirmButtonColor: "#3dc944",
             }).then(() => {
                 // Redirect or perform any other action after successful login
                 window.location.href = "/employee/employee-search";
@@ -32,7 +33,8 @@ document.getElementById("employeeLoginForm").addEventListener("submit", async fu
             Swal.fire({
                 icon: 'error',
                 title: 'Login Failed',
-                text: data.message
+                text: data.message,
+                confirmButtonColor: "#d33",
             });
         }
     } catch (error) {
@@ -40,7 +42,8 @@ document.getElementById("employeeLoginForm").addEventListener("submit", async fu
         Swal.fire({
             icon: 'error',
             title: 'Error',
-            text: 'An error occurred while processing your request. Please try again later.'
+            text: 'An error occurred while processing your request. Please try again later.',
+            confirmButtonColor: "#d33",
         });
     }
 });

@@ -97,13 +97,13 @@
 
                                             <div class="form-check form-check-inline">
                                                 <input class="form-check-input" type="radio" name="maritalStatus"
-                                                    id="maritalStatusYes" value="yes" />
+                                                    id="maritalStatusYes" value="married" />
                                                 <label class="form-check-label" for="maritalStatusYes">Yes</label>
                                             </div>
 
                                             <div class="form-check form-check-inline">
                                                 <input class="form-check-input" type="radio" name="maritalStatus"
-                                                    id="maritalStatusNo" value="no" />
+                                                    id="maritalStatusNo" value="unmarried" />
                                                 <label class="form-check-label" for="maritalStatusNo">No</label>
                                             </div>
 
@@ -286,7 +286,7 @@ document.getElementById("employeeRegistrationForm").addEventListener("submit", f
             Swal.fire({
                 icon: "error",
                 title: "Error!",
-                text: "Failed to submit form. Please try again later.",
+                text: data.message,
                 confirmButtonColor: "#d33",
             });
         }

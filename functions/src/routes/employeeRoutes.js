@@ -12,10 +12,10 @@ const { authenticateToken } = require('../utilities/authMiddleware'); // Import 
 router.post('/employee-registration', handleEmployeeRegistration);
 
 // Search employees route (requires authentication)
-router.get('/employee-search', searchEmployees);
+router.get('/employee-search',authenticateToken, searchEmployees);
 
 // Get all employees route (requires authentication)
-router.get('/getall-employees', getAllEmployees);
+router.get('/getall-employees',authenticateToken, getAllEmployees);
 
 // Update employee status route (requires authentication)
 router.patch('/employee-status/:employeeId', updateEmployeeStatus);
