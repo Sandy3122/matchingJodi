@@ -16,7 +16,7 @@ module.exports = {
       }
   
       // Check if account status is active
-      if (employee.accountStatus !== 'Active') {
+      if (employee.accountStatus !== 'active') {
         return res.status(401).json({ message: 'Your account is inactive, please contact admin.' });
       }
   

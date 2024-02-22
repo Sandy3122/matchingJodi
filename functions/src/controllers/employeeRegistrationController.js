@@ -147,12 +147,12 @@ module.exports = {
         const hashedPin = await bcrypt.hash(pin, 10);
 
         // Convert relevant fields to lowercase
-        const lowerCaseFirstName = firstName.toLowerCase();
-        const lowerCaseLastName = lastName.toLowerCase();
-        const lowerCaseGender = gender.toLowerCase();
-        const lowerCaseEmployeeEmail = employeeEmail.toLowerCase();
-        const lowerCaseKycDocumentType = kycDocumentType.toLowerCase();
-        const lowerCaseMaritalStatus = maritalStatus.toLowerCase();
+        const lowerCaseFirstName = firstName.toLowerCase().trim();
+        const lowerCaseLastName = lastName.toLowerCase().trim();
+        const lowerCaseGender = gender.toLowerCase().trim();
+        const lowerCaseEmployeeEmail = employeeEmail.toLowerCase().trim();
+        const lowerCaseKycDocumentType = kycDocumentType.toLowerCase().trim();
+        const lowerCaseMaritalStatus = maritalStatus.toLowerCase().trim();
 
         const employeeData = {
           firstName: lowerCaseFirstName,
@@ -170,7 +170,7 @@ module.exports = {
           role: isAdminPanel ? (role || "user") : "user",
           designation: isAdminPanel ? (designation || "Employee") : "employee",
           joiningDate: joiningDate ? new Date(joiningDate) : timestamp,
-          accountStatus: isAdminPanel ? (accountStatus || "Active") : "inactive"
+          accountStatus: isAdminPanel ? (accountStatus || "active") : "inactive"
         };
 
         const photoUrl = await uploadFile(files.employeePhoto[0], employeeFolder, employeeId, "employeeProfilePic");
