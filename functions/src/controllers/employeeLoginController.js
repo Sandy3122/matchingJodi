@@ -27,7 +27,7 @@ module.exports = {
       }
   
       // Generate JWT token
-      const token = jwt.sign({ id: employee.employeeId }, secretKey, { expiresIn: '30m' });
+      const token = jwt.sign({ id: employee.employeeId, userType: 'employee' }, secretKey, { expiresIn: '30m' });
   
       // Store token in session
       req.session.token = token;

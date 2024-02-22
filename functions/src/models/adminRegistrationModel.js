@@ -1,3 +1,4 @@
+// admin registration model
 const admin = require('firebase-admin');
 
 async function saveAdminData(adminId, adminData) {

@@ -9,7 +9,7 @@ module.exports = {
       let { query: searchTerm } = req.query;
 
       if (!searchTerm) {
-        return res.status(400).json({ error: "Search query is required." });
+        return res.status(400).json({ message: "Search query is required." });
       }
 
       // Convert search query parameter to lowercase
@@ -58,7 +58,7 @@ module.exports = {
           return res.status(200).json(employees);
         }
 
-        return res.status(404).json({ error: "No matching employees found." });
+        return res.status(404).json({ message: "No matching employees found." });
       }
 
       const employees = [];

@@ -5,7 +5,7 @@ const cors = require("cors");
 const admin = require("firebase-admin");
 const cookieParser = require("cookie-parser");
 const bodyParser = require("body-parser");
-const sessions = require('express-session'); // Import express-session
+const session = require('express-session'); // Import express-session
 const serviceAccount = require('./serviceAccountKey.json')
 
 
@@ -28,25 +28,15 @@ app.use(cookieParser());
 app.use(express.static('public'));
 
 // Configure express-session
-// app.use(session({
-//   secret: process.env.SESSION_SECRET_KEY, // Change this to a secure random string
-//   resave: false,
-//   saveUninitialized: false,
-//   cookie: {
-//     secure: false, // Set to true to only send cookies over HTTPS
-//     maxAge: 24 * 60 * 60 * 1000 // Example: set session expiration time to 1 day
-//   },
-//   proxy: true // Enable trust proxy
-// }));
+app.use(session({
+  secret: process.env.SESSION_SECRET_KEY, // Change this to a secure random string
+  resave: false,
+  saveUninitialized: false,
+  cookie: {
+    maxAge: 30 * 60 * 1000, // Session expires in 30 minutes (30 * 60 * 1000 milliseconds)
+  }
+}));
 
-app.use(
-  sessions({
-    cookieName: "session",
-    secret: "peednasnamhskalramuk9991",
-    saveUninitialized: true,
-    resave: false,
-  })
-);
 
 
 const userRoutes = require("./src/routes/userRoutes");

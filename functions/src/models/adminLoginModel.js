@@ -1,3 +1,4 @@
+// admin login model
 const admin = require("firebase-admin");
 
 async function getAdminByPhoneNumber(phoneNumber) {

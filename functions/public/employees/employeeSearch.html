@@ -28,6 +28,8 @@
 
   <!-- Bootstrap JS -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
   <script>
     // Function to format date and time
     function formatDateTime(dateTime) {
@@ -105,27 +107,56 @@ fileBoxes.append(fileBoxHtml);
     // Function to search employees
     function searchEmployees() {
       const searchTerm = document.getElementById('searchInput').value.trim();
-
+    
       if (!searchTerm) {
-        alert("Please enter a search term.");
+        Swal.fire({
+          icon: 'error',
+          title: 'Oops...',
+          text: 'Please enter a search term.',
+        });
         return;
       }
-
-      fetch(`/api/employee-search?query=${searchTerm}`)
-        .then(response => {
-          if (!response.ok) {
-            throw new Error('Network response was not ok');
-          }
-          return response.json();
-        })
-        .then(data => {
-          displayEmployeeData(data);
-        })
-        .catch(error => {
-          console.error('There was a problem with the fetch operation:', error);
-          alert('There was an error fetching data. Please try again later.');
-        });
+    
+      // Handle error like login router
+fetch(`/api/employee-search?query=${searchTerm}`)
+  .then(response => {
+    if (!response.ok) {
+      if (response.status === 403) {
+        throw new Error('Unauthorized: Token not provided.');
+      }
+      throw new Error('Network response was not ok');
     }
+    return response.json();
+  })
+  .then(data => {
+    if (data.message) {
+      Swal.fire({
+        icon: 'info',
+        title: 'No Matching Employees Found',
+        text: data.message,
+      });
+    } else {
+      displayEmployeeData(data);
+    }
+  })
+  .catch(error => {
+    if (error.message === 'Network response was not ok') {
+      Swal.fire({
+        icon: 'error',
+        title: 'Network Error',
+        text: 'There was a problem with the network. Please try again later.',
+      });
+    } else {
+      Swal.fire({
+        icon: 'error',
+        title: 'Unauthorized Access',
+        text: error.message,
+      });
+    }
+  });
+
+    }
+
   </script>
 </body>
 </html>

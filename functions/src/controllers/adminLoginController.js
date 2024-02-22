@@ -1,3 +1,4 @@
+// admin login controller
 const { getAdminByPhoneNumber } = require("../models/adminLoginModel");
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
@@ -35,7 +36,7 @@ module.exports = {
       });
     } catch (error) {
       console.error('Error logging in:', error);
-      return res.status(500).json({ error: 'Internal server error' });
+      return res.status(500).json({ message: 'Internal server error' });
     }
   },  
 
