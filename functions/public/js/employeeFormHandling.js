@@ -26,8 +26,10 @@ document.getElementById("employeeLoginForm").addEventListener("submit", async fu
                 confirmButtonColor: "#3dc944",
             }).then(() => {
                 // Redirect or perform any other action after successful login
-                window.location.href = "/employee/employee-search";
+                window.location.href = "/employee/employee-profile";
             });
+            // Store token in sessionStorage
+            sessionStorage.setItem('employeeToken', data.token);
         } else {
             // Error
             Swal.fire({

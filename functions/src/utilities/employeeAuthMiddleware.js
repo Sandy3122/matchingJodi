@@ -1,30 +1,22 @@
-// employeeAuthMiddleware.js
+const jwt = require('jsonwebtoken');
+const secretKey = process.env.SECRET_KEY;
 
-const jwt = require("jsonwebtoken");
-const SECRET_KEY = process.env.SECRET_KEY;
-
-const employeeAuthMiddleware = (req, res, next) => {
-    // Retrieve the token from the session
-    let token = req.session.token;
-
-    // Check if token is missing
+function authenticateToken(req, res, next) {
+    const token = req.session.employeeToken;
     if (!token) {
-        return res.status(403).json({ auth: false, message: "Token not provided." });
-        
+        return res.status(401).json({ message: 'Authentication required.' });
     }
 
-    // Verify the token
-    jwt.verify(token, SECRET_KEY, (err, user) => {
-        if (err || user.userType !== 'employee') {
-            return res.status(401).json({ auth: false, message: "Unauthorized access." });
+    jwt.verify(token, secretKey, (err, decoded) => {
+        if (err) {
+            console.error('Error verifying JWT token:', err);
+            return res.status(403).json({ message: 'Failed to authenticate token.' });
         }
-
-        // If verification succeeds and user type is employee, attach the user data to the request object
-        req.user = user;
-
-        // Call the next middleware in the chain
-        next();
+        req.user = decoded; // Set decoded user information on req.user
+        next(); // Move to the next middleware or route handler
     });
-};
+}
 
-module.exports = employeeAuthMiddleware;
+module.exports = {
+    authenticateToken
+};

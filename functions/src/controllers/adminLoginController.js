@@ -23,11 +23,14 @@ module.exports = {
         return res.status(401).json({ message: 'Invalid phone number or PIN.' });
       }
   
-      // Generate JWT token with user type as 'admin'
-      const token = jwt.sign({ id: admin.id, userType: 'admin' }, secretKey, { expiresIn: '30m' });
+      // Determine user role (e.g., admin, employee, user)
+      const role = 'admin'; // Assign admin role for now
+      
+      // Generate JWT token with user type as the role
+      const token = jwt.sign({ id: admin.id, role: role }, secretKey, { expiresIn: '30m' });
 
       // Store token in session or response body as needed
-      req.session.token = token;
+      req.session.adminToken = token;
   
       // Return the token or any other relevant data
       return res.status(200).json({
@@ -40,15 +43,13 @@ module.exports = {
     }
   },  
 
-  // Admin Logout route (if needed)
-  handleAdminLogout: function(req, res) {
-    // Clear the token from the session
-    req.session.destroy(err => {
-      if (err) {
-        console.error('Error destroying session:', err);
-        return res.status(500).json({ message: 'Internal server error' });
-      }
-      res.redirect('/admin/admin-login');
-    });
-  }
+  // Admin Logout route
+handleAdminLogout: function(req, res) {
+  // Clear the adminToken from the session
+  delete req.session.adminToken;
+
+  // Redirect to admin login page after logout
+  res.redirect('/admin/admin-login');
+}
+
 };

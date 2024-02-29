@@ -4,6 +4,7 @@ const router = express.Router();
 const { handleAdminRegistration } = require('../controllers/adminRegistrationController');
 const { handleAdminLogin, handleAdminLogout } = require('../controllers/adminLoginController');
 
+
 // Admin registration route
 router.post('/admin-registration', handleAdminRegistration);
 

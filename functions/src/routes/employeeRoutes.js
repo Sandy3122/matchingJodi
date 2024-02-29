@@ -1,4 +1,3 @@
-// employeeRoutes.js
 const express = require('express');
 const router = express.Router();
 const { handleEmployeeRegistration } = require('../controllers/employeeRegistrationController');
@@ -7,6 +6,7 @@ const { getAllEmployees } = require('../controllers/getAllEmployees');
 const { updateEmployeeStatus } = require('../controllers/employeeStatusController');
 const { handleEmployeeLogin, handleEmployeeLogout } = require('../controllers/employeeLoginController');
 const { authenticateToken } = require('../utilities/employeeAuthMiddleware'); // Import the authenticateToken middleware
+const { getEmployeeProfile } = require('../controllers/employeeProfileController'); // Import the getEmployeeProfile controller
 
 // Employee registration route
 router.post('/employee-registration', handleEmployeeRegistration);
@@ -25,5 +25,8 @@ router.post('/employee-login', handleEmployeeLogin);
 
 // Logout route
 router.get('/employee-logout', handleEmployeeLogout);
+
+// Employee profile route (requires authentication)
+router.get('/employee-profile', authenticateToken, getEmployeeProfile);
 
 module.exports = router;

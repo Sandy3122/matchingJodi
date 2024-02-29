@@ -1,3 +1,4 @@
+// employeeLoginController.js
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const { getEmployeeByPhoneNumber } = require("../models/employeeLoginModel");
@@ -30,7 +31,7 @@ module.exports = {
       const token = jwt.sign({ id: employee.employeeId, userType: 'employee' }, secretKey, { expiresIn: '30m' });
   
       // Store token in session
-      req.session.token = token;
+      req.session.employeeToken = token;
   
       // Return the token or any other relevant data
       return res.status(200).json({
@@ -47,7 +48,7 @@ module.exports = {
   // Employee Logout route
   handleEmployeeLogout: function(req, res) {
     // Clear the token from the session
-    delete req.session.token;
+    delete req.session.employeeToken;
 
     // Redirect to login page after logout
     res.redirect('/employee/employee-login');

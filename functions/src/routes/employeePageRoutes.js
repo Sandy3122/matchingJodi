@@ -11,23 +11,29 @@ router.get("/employee-registration", (req, res) => {
 // Employee Login route
 router.get("/employee-login", (req, res) => {
   // Check if user is authenticated
-  if (req.session.token) {
-    // If authenticated, redirect to dashboard or any authenticated route
-    return res.redirect("/employee/employee-search"); // Assuming "/employee/dashboard" is the authenticated route for employees
+  if (req.session.employeeToken) {
+    // If authenticated, redirect to employee Search route
+    return res.redirect("/employee/employee-profile");
   }
-  // If not authenticated, serve the login page  
+  // If not authenticated, redirect to the login page  
   res.sendFile(path.join(__dirname, "..", "..", "public", "employees", "employeeLogin.html"));
 });
 
 // Home Page route
 router.get("/employee-search", (req, res) => {
   // Check if user is authenticated
-  if (!req.session.token) {
+  if (!req.session.employeeToken) {
     // If not authenticated, redirect to login page
     return res.redirect("/employee/employee-login");
   }
   // If authenticated, serve the page
   res.sendFile(path.join(__dirname, "..", "..", "public", "employees", "employeeSearch.html"));
+});
+
+
+// Home Page route
+router.get("/employee-profile", (req, res) => {
+  res.sendFile(path.join(__dirname, "..", "..", "public", "employees", "employeeProfile.html"));
 });
 
 module.exports = router;

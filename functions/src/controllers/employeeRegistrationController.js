@@ -1,4 +1,4 @@
-// employeeRegistrationController.js
+// Import necessary modules
 const multer = require("multer");
 const { saveEmployeeRegistrationData } = require("../models/employeeRegistrationModel");
 const { generateNumericId } = require("../utilities/generateIds");
@@ -8,16 +8,21 @@ const bcrypt = require('bcryptjs');
 const { PDFDocument } = require('pdf-lib');
 const jwt = require('jsonwebtoken');
 const { checkExistingUserByEmail, checkExistingUserByMobileNumber } = require("../utilities/userExistenceCheck");
+const allEmployeeRoutes = require("../routes/employeeRoutes"); // Import employee routes
 
+// Define secret key for JWT
+const secretKey = process.env.SECRET_KEY;
 
-const secretKey = process.env.SECRET_KEY
-
+// Initialize Firebase storage bucket
 const bucket = admin.storage().bucket();
+
+// Initialize multer for file upload
 const upload = multer({
   storage: multer.memoryStorage(),
-  limits: { fileSize: 2 * 1024 * 1024 }, // 2MB limit
+  limits: { fileSize: 2 * 1024 * 1024 }, // 2MB limit for file size
 });
 
+// Function to compress image files
 async function compressImage(file) {
   return sharp(file.buffer)
     .resize({ width: 600 }) // Resize to a maximum width of 600 pixels
@@ -25,12 +30,14 @@ async function compressImage(file) {
     .toBuffer();
 }
 
+// Function to compress PDF files
 async function compressPDF(file) {
   const pdfDoc = await PDFDocument.load(file.buffer);
   const pdfBytes = await pdfDoc.save();
   return pdfBytes;
 }
 
+// Function to compress various types of files
 async function compressFile(file, fileType) {
   if (fileType === "application/pdf") {
     return compressPDF(file);
@@ -41,6 +48,7 @@ async function compressFile(file, fileType) {
   }
 }
 
+// Function to upload file to Firebase storage
 async function uploadFile(file, folder, employeeId, fileType, kycDocumentType) {
   try {
     const compressedBuffer = await compressFile(file, file.mimetype);
@@ -50,8 +58,8 @@ async function uploadFile(file, folder, employeeId, fileType, kycDocumentType) {
     }
 
     const documentName = fileType === "employeeProfilePic" ? "profile_pic" :
-                         fileType === "employeeResume" ? "resume" :
-                         `${kycDocumentType}`;
+      fileType === "employeeResume" ? "resume" :
+      `${kycDocumentType}`;
 
     const fileName = `${employeeId}_${documentName}.${file.originalname.split('.').pop()}`;
     const filePath = `${folder}/${fileName}`;
@@ -79,8 +87,10 @@ async function uploadFile(file, folder, employeeId, fileType, kycDocumentType) {
   }
 }
 
+// Controller function to handle employee registration
 module.exports = {
   handleEmployeeRegistration: async function (req, res) {
+    // Handle file upload and form data parsing
     upload.fields([
       { name: "employeePhoto", maxCount: 1 },
       { name: "employeeResume", maxCount: 1 },
@@ -102,8 +112,6 @@ module.exports = {
         return res.status(400).send("Files not uploaded");
       }
 
-      const isAdminPanel = req.headers["source"] === "adminPanel";
-
       const employeeId = "e" + generateNumericId();
 
       const {
@@ -120,14 +128,13 @@ module.exports = {
         role,
         designation,
         joiningDate,
-        accountStatus
+        accountStatus,
       } = req.body;
 
       // Ensure the employee's folder exists
       const employeeFolder = `employees/${employeeId}`;
 
       try {
-
         // Check if the user already exists with the provided email
         const emailExists = await checkExistingUserByEmail(employeeEmail);
         if (emailExists) {
@@ -140,10 +147,9 @@ module.exports = {
           return res.status(401).json({ message: "User already exists with this mobile number." });
         }
         
+        const timestamp = new Date(); // Create a new Date object to represent the current timestamp
 
-        const timestamp = admin.firestore.FieldValue.serverTimestamp();
-
-        // Hashing the pin/password
+        // Hash the pin/password
         const hashedPin = await bcrypt.hash(pin, 10);
 
         // Convert relevant fields to lowercase
@@ -154,6 +160,7 @@ module.exports = {
         const lowerCaseKycDocumentType = kycDocumentType.toLowerCase().trim();
         const lowerCaseMaritalStatus = maritalStatus.toLowerCase().trim();
 
+        // Prepare employee data object
         const employeeData = {
           firstName: lowerCaseFirstName,
           lastName: lowerCaseLastName,
@@ -167,25 +174,30 @@ module.exports = {
           employeeEmergencyPhoneNumber,
           pin: hashedPin,
           kycDocumentType: lowerCaseKycDocumentType,
-          role: isAdminPanel ? (role || "user") : "user",
-          designation: isAdminPanel ? (designation || "Employee") : "employee",
+          role: role || "user",
+          designation: designation || "Employee",
           joiningDate: joiningDate ? new Date(joiningDate) : timestamp,
-          accountStatus: isAdminPanel ? (accountStatus || "active") : "inactive"
+          accountStatus: accountStatus || "inactive",
+          routeAccess: allEmployeeRoutes // Default route access to all employee routes
         };
 
+        // Upload files to storage and get their public URLs
         const photoUrl = await uploadFile(files.employeePhoto[0], employeeFolder, employeeId, "employeeProfilePic");
         const resumeUrl = await uploadFile(files.employeeResume[0], employeeFolder, employeeId, "employeeResume");
         const kycDocumentUrl = await uploadFile(files.kycDocument[0], employeeFolder, employeeId, "kycDocument", kycDocumentType);
 
+        // Add file URLs to employee data object
         employeeData.photoUrl = photoUrl;
         employeeData.resumeUrl = resumeUrl;
         employeeData.kycDocumentUrl = kycDocumentUrl;
 
+        // Save employee data to the database
         await saveEmployeeRegistrationData(employeeId, employeeData);
 
         // Generate JWT token
-        const token = jwt.sign({ employeeId }, secretKey, { expiresIn: '30m' }); // Replace 'your_secret_key' with your actual secret key
+        const token = jwt.sign({ employeeId }, secretKey, { expiresIn: '30m' });
 
+        // Send response with token
         return res.status(200).json({ message: "Data sent successfully.", token });
       } catch (error) {
         console.error("Error uploading files or saving data:", error);

@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/7.1.0/mdb.min.css" rel="stylesheet" />
+    <link rel="icon" type="image/x-icon" href="https://i.postimg.cc/W1qxgjkZ/logo.jpg">
+    <link rel="stylesheet" href="/css/employeeProfileStyle.css">
+    <title>Employee Profile Page</title>
+    <style>
+        .about-avatar {
+    height: 100%; /* Match the height of the about text container */
+}
+
+.about-avatar img {
+    height: 350px; /* Ensure the image fills its container */
+    width: auto; /* Allow the width to adjust proportionally */
+    max-width: 100%; /* Ensure the image does not exceed its container's width */
+}
+
+    </style>
+</head>
+
+<body>
+    <section class="section about-section gray-bg" id="about">
+        <div class="container">
+            <div class="row align-items-center flex-row-reverse">
+                <div style="float: right;">
+                    <a class="text-decoration-none link" href="/api/employee-logout">Log Out</a>
+                  </div>
+                <div class="col-6">
+                    <div class="about-text go-to">
+                        <h3 class="dark-color">Welcome <span id="firstName"></span></h3>
+                        <h6 class="theme-color lead">Role: <span id="role"></span></h6>
+                        <div class="row about-list">
+                            <div class="col-6">
+                                <div class="media">
+                                    <label>Birthday</label>
+                                    <p id="birthday"></p>
+                                </div>
+                                <div class="media">
+                                    <label>Age</label>
+                                    <p id="age"></p>
+                                </div>
+                                <div class="media">
+                                    <label>Marital Status</label>
+                                    <p id="maritalStatus"></p>
+                                </div>
+                                <div class="media">
+                                    <label>Gender</label>
+                                    <p id="gender"></p>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="media">
+                                    <label>E-mail</label>
+                                    <p id="email"></p>
+                                </div>
+                                <div class="media">
+                                    <label>Phone</label>
+                                    <p id="phoneNumber"></p>
+                                </div>
+                                <div class="media">
+                                    <label>Emergency Phone</label>
+                                    <p id="emergencyPhoneNumber"></p>
+                                </div>
+                                <div class="media">
+                                    <label>Joining Date</label>
+                                    <p id="joiningDate"></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-6 text-center">
+                    <div class="about-avatar" id="avatarContainer">
+                        <img id="profilePic" src="" title="" alt="">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</body>
+<!-- BootStrap CDN -->
+<!-- MDB -->
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/7.1.0/mdb.umd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf-lib/1.20.0/pdf-lib.min.js"></script>
+<script>
+// employeeProfilePage.js
+document.addEventListener('DOMContentLoaded', async function () {
+    try {
+        const response = await fetch('/api/employee-profile', {
+            method: 'GET',
+            headers: {
+                'Authorization': `Bearer ${sessionStorage.getItem('employeeToken')}`
+            }
+        });
+
+        if (!response.ok) {
+            throw new Error('Failed to fetch employee profile.');
+        }
+
+        const data = await response.json();
+        const employee = data.employee;
+        console.log(employee);
+
+        // Update DOM elements with employee data
+        document.getElementById('firstName').textContent = employee.firstName;
+        document.getElementById('role').textContent = employee.role;
+        document.getElementById('birthday').textContent = formatDate(employee.employeeDOB);
+        document.getElementById('age').textContent = calculateAge(employee.employeeDOB);
+        document.getElementById('maritalStatus').textContent = employee.maritalStatus;
+        document.getElementById('gender').textContent = employee.gender;
+        document.getElementById('email').textContent = employee.employeeEmail;
+        document.getElementById('phoneNumber').textContent = employee.employeePhoneNumber;
+        document.getElementById('emergencyPhoneNumber').textContent = employee.employeeEmergencyPhoneNumber;
+        document.getElementById('profilePic').src = employee.photoUrl;
+        document.getElementById('joiningDate').textContent = formatJoiningDate(employee.joiningDate);
+    } catch (error) {
+        console.error('Error fetching employee profile:', error);
+        // Handle error, e.g., display error message to the user
+    }
+});
+
+// Function to calculate age based on date of birth
+function calculateAge(dateOfBirth) {
+    const dob = new Date(dateOfBirth);
+    const ageDiff = Date.now() - dob.getTime();
+    const ageDate = new Date(ageDiff); // miliseconds from epoch
+    return Math.abs(ageDate.getUTCFullYear() - 1970);
+}
+
+// Function to format date as "Month Day, Year"
+function formatDate(dateString) {
+    const options = { year: 'numeric', month: 'long', day: 'numeric' };
+    const date = new Date(dateString);
+    return date.toLocaleDateString('en-US', options);
+}
+
+// Function to format joining date
+function formatJoiningDate(joiningDateResponse) {
+    // Check if the response is an object and contains the '_seconds' property
+    if (typeof joiningDateResponse === 'object' && joiningDateResponse.hasOwnProperty('_seconds')) {
+        // Extract the seconds part from the response
+        const seconds = joiningDateResponse._seconds;
+
+        // Convert seconds to milliseconds and create a Date object
+        const date = new Date(seconds * 1000);
+
+        // Format the date as "Month Day, Year" (e.g., "February 29, 2024")
+        const formattedDate = date.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
+
+        return formattedDate;
+    } else {
+        return 'Invalid Date';
+    }
+}
+
+
+
+
+
+
+</script>
+</html>

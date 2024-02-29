@@ -4,9 +4,9 @@ const path = require("path");
 // Employee Login route
 router.get("/admin-login", (req, res, next) => {
   // Check if user is authenticated
-  if (req.session.token) {
-    // If authenticated, redirect to dashboard or any authenticated route
-    return res.redirect("/admin/getall-employees"); // Assuming "/admin/dashboard" is the authenticated route
+  if (req.session.adminToken) {
+    // If authenticated, redirect or any authenticated route
+    return res.redirect("/admin/getall-employees");
   }
   // If not authenticated, serve the login page
   res.sendFile(path.join(__dirname, "..", "..", "public", "employees", "adminLogin.html"));
@@ -14,19 +14,22 @@ router.get("/admin-login", (req, res, next) => {
 
 // Home Page route
 router.get("/getall-employees", (req, res, next) => {
-  // Check if user is authenticated
-  if (!req.session.token) {
-    // If not authenticated, redirect to login page
-    return res.redirect("/admin/admin-login");
-  }
-  // If authenticated, serve the page
   res.sendFile(path.join(__dirname, "..", "..", "public", "employees", "getAllEmployees.html"));
 });
+// router.get("/getall-employees", (req, res, next) => {
+//   // Check if user is authenticated redirect to admin login page    
+//   if (!req.session.adminToken) {
+//     // If not authenticated, redirect to login page
+//     return res.redirect("/admin/admin-login");
+//   }
+//   // If authenticated, serve the page
+//   res.sendFile(path.join(__dirname, "..", "..", "public", "employees", "getAllEmployees.html"));
+// });
 
 // Home Page route
 router.get("/employee-search", (req, res, next) => {
   // Check if user is authenticated
-  if (!req.session.token) {
+  if (!req.session.adminToken) {
     // If not authenticated, redirect to login page
     return res.redirect("/admin/admin-login");
   }
