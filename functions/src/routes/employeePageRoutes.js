@@ -20,7 +20,7 @@ router.get("/employee-login", (req, res) => {
 });
 
 // Home Page route
-router.get("/employee-search", (req, res) => {
+router.get("/:employeeId/employee-search", (req, res) => {
   // Check if user is authenticated
   if (!req.session.employeeToken) {
     // If not authenticated, redirect to login page
@@ -31,9 +31,10 @@ router.get("/employee-search", (req, res) => {
 });
 
 
-// Home Page route
-router.get("/employee-profile", (req, res) => {
-  res.sendFile(path.join(__dirname, "..", "..", "public", "employees", "employeeProfile.html"));
+// Define route to serve employee profile page
+router.get('/:employeeId/employee-profile', (req, res) => {
+  res.sendFile(path.join(__dirname, '..', '..', 'public', 'employees', 'employeeProfile.html'));
 });
+
 
 module.exports = router;

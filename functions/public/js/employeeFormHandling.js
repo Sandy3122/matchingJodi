@@ -16,6 +16,8 @@ document.getElementById("employeeLoginForm").addEventListener("submit", async fu
         });
 
         const data = await response.json();
+        console.log(data.employeeId)
+        console.log(`/employee/${data.employeeId}/employee-profile`);
 
         if (response.ok) {
             // Success
@@ -25,8 +27,8 @@ document.getElementById("employeeLoginForm").addEventListener("submit", async fu
                 text: data.message,
                 confirmButtonColor: "#3dc944",
             }).then(() => {
-                // Redirect or perform any other action after successful login
-                window.location.href = "/employee/employee-profile";
+                // Redirect to employee profile with employeeId included in the URL
+                window.location.href = `/employee/${data.employeeId}/employee-profile`;
             });
             // Store token in sessionStorage
             sessionStorage.setItem('employeeToken', data.token);
@@ -49,4 +51,3 @@ document.getElementById("employeeLoginForm").addEventListener("submit", async fu
         });
     }
 });
-

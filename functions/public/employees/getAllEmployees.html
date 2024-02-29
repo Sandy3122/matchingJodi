@@ -3,6 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/x-icon" href="https://i.postimg.cc/W1qxgjkZ/logo.jpg">
     <title>Admin Dashboard</title>
     <!-- Bootstrap CSS -->
     <link
@@ -167,25 +168,23 @@
                             </div>
                         </td>
                         <td>
-    <div class="dropdown">
-        <button class="btn btn-secondary dropdown-toggle" type="button" id="actionsDropdown-${employee.employeeId}" data-bs-toggle="dropdown" aria-expanded="false">
-            Route Access
-        </button>
-        <ul class="dropdown-menu dropdown-menu-start dropdown-menu-lg-end" aria-labelledby="actionsDropdown-${employee.employeeId}">
-            <!-- Dynamically populate route access options -->
-            ${allEmployeeRoutes.map(route => `
-                <li class="px-2 py-2">
-                    <div class="form-check form-check-inline">
-                        <input type="checkbox" class="form-check-input" id="${route}-${employee.employeeId}" value="${route}">
-                        <label class="form-check-label" for="${route}-${employee.employeeId}">${route}</label>
-                    </div>
-                </li>
-            `).join('')}
-        </ul>
-    </div>
-</td>
-            
-                        `;
+                            <div class="dropdown">
+                                <button class="btn btn-secondary dropdown-toggle" type="button" id="actionsDropdown-${employee.employeeId}" data-bs-toggle="dropdown" aria-expanded="false">
+                                    Route Access
+                                </button>
+                                <ul class="dropdown-menu dropdown-menu-start dropdown-menu-lg-end" aria-labelledby="actionsDropdown-${employee.employeeId}">
+                                    <!-- Dynamically populate route access options -->
+                                    ${allEmployeeRoutes.map(route => `
+                                        <li class="px-2 py-2">
+                                            <div class="form-check form-check-inline">
+                                                <input type="checkbox" class="form-check-input" id="${route}-${employee.employeeId}" value="${route}">
+                                                <label class="form-check-label" for="${route}-${employee.employeeId}">${route}</label>
+                                            </div>
+                                        </li>
+                                    `).join('')}
+                                </ul>
+                            </div>
+                        </td>`;
               employeeTableBody.appendChild(row);
             });
           })

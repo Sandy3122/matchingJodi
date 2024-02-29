@@ -36,7 +36,8 @@ module.exports = {
       // Return the token or any other relevant data
       return res.status(200).json({
         message: "Employee Login Successful",
-        token 
+        token,
+        employeeId: employee.employeeId // Include the employeeId in the response
       });
     } catch (error) {
       console.error('Error logging in:', error);
