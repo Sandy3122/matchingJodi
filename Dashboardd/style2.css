@@ -1,0 +1,135 @@
+/* Reset default margin, padding, and prevent scrolling */
+body {
+    margin: 0;
+    padding: 0;
+    overflow: hidden; /* Prevent scrolling */
+  }
+  
+  /* Header styling */
+  #header {
+    background-color: #333;
+    color: #fff;
+    padding: 0.1px;
+    text-align: Left;
+    padding-left: 30px;
+    opacity: 1;
+  }
+  
+  /* Content area styling */
+  #content {
+    float: left;
+    width: 85%;
+    height: 90%;
+  }
+  
+  /* Left sidebar styling */
+  #left-sidebar {
+    background-color: #ff2f68;
+    float: left;
+    width: 15%;
+    height: 100vh; /* 100% of the viewport height */
+    overflow-y: auto; /* Enable vertical scrolling if content overflows */
+  }
+  
+  /* Footer styling */
+  #footer {
+    clear: both; /* Clear floats */
+    background-color: #333;
+    color: #fff;
+    padding: 10px;
+    text-align: center;
+  }
+  
+  /* Links inside the left sidebar */
+  #left-sidebar .links a{
+    display: block;
+    padding: 20px;
+    color:black;
+    margin-top: 1px;
+    text-decoration: none;
+    
+    font-family: "Raleway",sans-serif;
+    border-bottom: 2px solid #555;
+  }
+  
+  /* Iframe container styling */
+  #iframe-container {
+    height: 100%; /* Set the iframe container height to 100% of the #content */
+  }
+  
+  /* Iframe styling */
+  #content-iframe {
+    width: 100%;
+    height: 100%; /* Set the iframe height to 100% of its container */
+  }
+  
+  /* Styles for menu items */
+  .menu-item {
+    display: flex;
+    align-items: center;
+    padding: 10px 15px;
+    cursor: pointer;
+    border-bottom: 2px solid #ccc;
+  }
+  
+  .menu-icon {
+    margin-right: 10px;
+    font-size: 18px;
+  }
+  
+  /* Styles for submenus (initially hidden) */
+  .submenu {
+    display: none;
+    background-color: #f5f5f5;
+    padding-left: 30px;
+  }
+  
+  /* Show submenus when a menu item is clicked */
+  .menu-item:hover .submenu {
+    display: block;
+  }
+  
+  /* Remove underline from links and add hover effect */
+  #left-sidebar .menu-item a,
+  #left-sidebar .submenu-item a {
+    text-decoration: none;
+    color: black; /* Set the default text color */
+    transition: color 0.0s; /* Smooth transition for color change */
+  }
+  
+  #left-sidebar .menu-item a:hover,
+  #left-sidebar .submenu-item a:hover {
+    color: #4169E1; /* Change text color on hover */
+  }
+  
+  /* Add a cursor pointer to indicate clickable links */
+  #left-sidebar .menu-item,
+  #left-sidebar .submenu-item {
+    cursor: pointer;
+  }
+  
+  .submenu-item {
+    padding: 5px 10px; /* Adjust padding as needed */
+  }
+  
+  /* Style the arrow icon */
+  .menu-item .menu-icon {
+    display: inline-block;
+    width: 10px;
+    text-align: center;
+  }
+  
+  /* Rotate the arrow when submenu is open */
+  .menu-item.open .menu-icon {
+    transform: rotate(90deg);
+  }
+  
+  /* Style the submenu to be initially hidden */
+  .submenu {
+    display: none;
+  }
+  
+  /* Display the submenu when menu-item is clicked */
+  .menu-item.open + .submenu {
+    display: block;
+  }

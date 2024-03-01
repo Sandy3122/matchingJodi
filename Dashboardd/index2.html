@@ -1,0 +1,100 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Prevent right click -->
+   
+    <!-- <link rel="icon" type="image/x-icon" href="/gss/images/logo.jpg"> -->
+    <link rel="stylesheet" href="style2.css">
+    <title>Panel</title>
+
+    <!-- Reload page once -->
+    <script>localStorage.getItem('hasReloaded') || (localStorage.setItem('hasReloaded', true), location.reload());</script>
+
+</head>
+
+<body>
+    
+    <div id="header">
+        <h2> Dashboard </h2>
+    </div>
+
+    <div id="left-sidebar">
+        <!-- Menu items 1 with submenus -->
+        <div class="menu-item">
+            <div class="menu-icon">▶</div> Employee
+        </div>
+
+        <div class="submenu">
+            <div class="submenu-item"><a href="https://www.google.com" target="content">Employee Search</a></div>
+            <div class="submenu-item"><a href="https://matchingjodiweb.web.app" target="content">Add Employee</a></div>
+        </div>
+
+        <!-- Menu items 2 with submenus
+        <div class="menu-item">
+            <div class="menu-icon">▶</div> Req / Demand Details
+        </div> -->
+
+        <!-- <div class="submenu">
+            <div class="submenu-item"><a href="add_req_details_page.php" target="content">Add Req Details </a></div>
+            <div class="submenu-item"><a href="view_req_details_page.php" target="content"> View / Export Req Details</a></div>
+            <div class="submenu-item"><a href="update_demand_details_page.php" target="content">Update Req Details</a></div>
+            <div class="submenu-item"><a href="reopen_req_page.php" target="content"> Re-Open Req</a></div>
+            <div class="submenu-item"><a href="allocated_req_page.php" target="content"> My Allocation</a></div>
+             <div class="submenu-item"><a href="add_business_lane_page.php" target="content">Add Business Lane</a></div>-->
+        <!-- </div> --> 
+
+        <!-- Menu items 3 with submenus -->
+        <!-- <div class="menu-item">
+            <div class="menu-icon">▶</div>
+            Source Mix
+        </div>
+        <div class="submenu">
+            <div class="submenu-item"><a href="../source mix/upload_source_mix.php" target="content">Source Mix-Upload</a></div>
+            <div class="submenu-item"><a href="view_source_mix_page.php" target="content">View Source Mix</a></div>
+            <div class="submenu-item"><a href="source_mix_template_page.php" download="source mix upload template.csv">Download Template</a></div>
+        </div> -->
+
+        <!-- Menu Item 4 Logout -->
+        <div class="menu-item">
+            <a href="logout_page.php">Logout</a>
+        </div>
+    </div>
+
+    <div id="content">
+        <iframe name="content" width="100%" height="900px" frameborder="0"></iframe>
+        
+    </div>
+
+    <script>
+        // JavaScript code to handle submenu toggling
+        const menuItems = document.querySelectorAll('.menu-item');
+        menuItems.forEach((menuItem) => {
+            menuItem.addEventListener('click', () => {
+                const submenu = menuItem.nextElementSibling;
+                menuItem.classList.toggle('open');
+                submenu.style.display = submenu.style.display === 'block' ? 'none' : 'block';
+            });
+        });
+    </script>
+    <script>
+        // JavaScript code to disable right-click inside the iframe
+        document.querySelector('iframe[name="content"]').addEventListener('load', function () {
+            const iframeDocument = this.contentDocument || this.contentWindow.document;
+            
+            iframeDocument.addEventListener('contextmenu', function (e) {
+                // Prevent right-click context menu inside the iframe
+                e.preventDefault();
+
+                // Display a notification
+                alert('Right-clicking is disabled.');
+            });
+        });
+    </script>
+</body>
+
+</html>
