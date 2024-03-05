@@ -5,7 +5,7 @@ const employeesCollection = admin.firestore().collection('employeeRegistrationDa
 
 async function getEmployeeByPhoneNumber(phoneNumber) {
     try {
-        const querySnapshot = await employeesCollection.where('employeePhoneNumber', '==', phoneNumber).limit(1).get();
+        const querySnapshot = await employeesCollection.where('phoneNumber', '==', phoneNumber).limit(1).get();
         if (!querySnapshot.empty) {
             const employeeDoc = querySnapshot.docs[0];
             const employeeData = employeeDoc.data();

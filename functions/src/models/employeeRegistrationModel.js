@@ -21,5 +21,15 @@ module.exports = {
       console.error('Error saving employee registration data:', error);
       throw error;
     }
+  },
+
+  updateEmployeeRouteAccess: async function (employeeId, routes) {
+    try {
+      await db.collection('employeeRegistrationData').doc(employeeId).update({ routes: routes });
+      return true;
+    } catch (error) {
+      console.error('Error updating employee route access:', error);
+      throw error;
+    }
   }
 };

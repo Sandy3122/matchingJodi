@@ -115,7 +115,7 @@
                                     <div class="col-md-6 col-sm-6 mb-3 pb-2">
 
                                         <div data-mdb-input-init class="form-outline datepicker w-100">
-                                            <input type="date" class="form-control form-control-lg" name="employeeDOB"
+                                            <input type="date" class="form-control form-control-lg" name="birthday"
                                                 id="birthdayDate" required />
                                             <label for="birthdayDate" class="form-label">Date Of Birth</label>
                                         </div>
@@ -124,7 +124,7 @@
                                     <div class="col-md-6 col-sm-6 mb-3 pb-2">
 
                                         <div data-mdb-input-init class="form-outline">
-                                            <input type="email" id="employeeEmail" name="employeeEmail"
+                                            <input type="email" id="employeeEmail" name="email"
                                                 class="form-control form-control-lg" oninput="checkInput(this)"
                                                 required />
                                             <label class="form-label" for="employeeEmail">Email</label>
@@ -137,7 +137,7 @@
                                     <div class="col-md-6 col-sm-6 mb-3 pb-2">
 
                                         <div data-mdb-input-init class="form-outline">
-                                            <input type="tel" id="phoneNumber" name="employeePhoneNumber"
+                                            <input type="tel" id="phoneNumber" name="phoneNumber"
                                                 class="form-control form-control-lg"
                                                 oninput="this.value = this.value.replace(/[^0-9]/g, ''); checkInput(this);"
                                                 maxlength="10" pattern="[0-9]{10}" required autocomplete="off" />
@@ -148,11 +148,11 @@
                                     <div class="col-md-6 col-sm-6 mb-3 pb-2">
 
                                         <div data-mdb-input-init class="form-outline">
-                                            <input type="tel" id="employeeEmergencyPhoneNumber"
-                                                class="form-control form-control-lg" name="employeeEmergencyPhoneNumber"
+                                            <input type="tel" id="emergencyPhoneNumber"
+                                                class="form-control form-control-lg" name="emergencyPhoneNumber"
                                                 oninput="this.value = this.value.replace(/[^0-9]/g, ''); checkInput(this);"
                                                 maxlength="10" pattern="[0-9]{10}" required autocomplete="off" />
-                                            <label class="form-label" for="employeeEmergencyPhoneNumber">Emergency Phone
+                                            <label class="form-label" for="emergencyPhoneNumber">Emergency Phone
                                                 Number</label>
                                         </div>
 

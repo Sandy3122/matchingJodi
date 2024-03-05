@@ -6,11 +6,11 @@ const secretKey = process.env.SECRET_KEY;
 
 module.exports = {
   handleEmployeeLogin: async function (req, res) {
-    const { employeePhoneNumber, pin } = req.body;
+    const { phoneNumber, pin } = req.body;
   
     try {
       // Fetch employee by phone number
-      const employee = await getEmployeeByPhoneNumber(employeePhoneNumber);
+      const employee = await getEmployeeByPhoneNumber(phoneNumber);
       
       if (!employee) {
         return res.status(401).json({ message: 'Invalid phone number or PIN.' });
@@ -27,16 +27,19 @@ module.exports = {
         return res.status(401).json({ message: 'Invalid phone number or PIN.' });
       }
   
+      // determine user role
+      const role = 'default'
+
       // Generate JWT token
-      const token = jwt.sign({ id: employee.employeeId, userType: 'employee' }, secretKey, { expiresIn: '30m' });
+      const employeeToken = jwt.sign({ id: employee.employeeId, role: role }, secretKey, { expiresIn: '30m' });
   
       // Store token in session
-      req.session.employeeToken = token;
+      req.session.employeeToken = employeeToken;
   
       // Return the token or any other relevant data
       return res.status(200).json({
         message: "Employee Login Successful",
-        token,
+        token: employeeToken,
         employeeId: employee.employeeId // Include the employeeId in the response
       });
     } catch (error) {

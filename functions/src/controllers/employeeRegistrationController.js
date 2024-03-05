@@ -118,11 +118,11 @@ module.exports = {
         firstName,
         lastName,
         gender,
-        employeeDOB,
+        birthday,
         maritalStatus,
-        employeeEmail,
-        employeePhoneNumber,
-        employeeEmergencyPhoneNumber,
+        email,
+        phoneNumber,
+        emergencyPhoneNumber,
         pin,
         kycDocumentType,
         role,
@@ -136,13 +136,13 @@ module.exports = {
 
       try {
         // Check if the user already exists with the provided email
-        const emailExists = await checkExistingUserByEmail(employeeEmail);
+        const emailExists = await checkExistingUserByEmail(email);
         if (emailExists) {
           return res.status(401).json({ message: "User already exists with this email." });
         }
         
         // Check if the user already exists with the provided mobile number
-        const mobileNumberExists = await checkExistingUserByMobileNumber(employeePhoneNumber);
+        const mobileNumberExists = await checkExistingUserByMobileNumber(phoneNumber);
         if (mobileNumberExists) {
           return res.status(401).json({ message: "User already exists with this mobile number." });
         }
@@ -156,7 +156,7 @@ module.exports = {
         const lowerCaseFirstName = firstName.toLowerCase().trim();
         const lowerCaseLastName = lastName.toLowerCase().trim();
         const lowerCaseGender = gender.toLowerCase().trim();
-        const lowerCaseEmployeeEmail = employeeEmail.toLowerCase().trim();
+        const lowerCaseemail = email.toLowerCase().trim();
         const lowerCaseKycDocumentType = kycDocumentType.toLowerCase().trim();
         const lowerCaseMaritalStatus = maritalStatus.toLowerCase().trim();
 
@@ -166,12 +166,12 @@ module.exports = {
           lastName: lowerCaseLastName,
           gender: lowerCaseGender,
           maritalStatus: lowerCaseMaritalStatus,
-          employeeDOB,
+          birthday,
           timestamp,
           employeeId,
-          employeeEmail: lowerCaseEmployeeEmail,
-          employeePhoneNumber,
-          employeeEmergencyPhoneNumber,
+          email: lowerCaseemail,
+          phoneNumber,
+          emergencyPhoneNumber,
           pin: hashedPin,
           kycDocumentType: lowerCaseKycDocumentType,
           role: role || "user",

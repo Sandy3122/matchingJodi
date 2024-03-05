@@ -1,20 +1,20 @@
 const admin = require("firebase-admin");
 
-async function checkExistingAdminByEmail(adminEmail) {
+async function checkExistingAdminByEmail(email) {
   const existingAdmin = await admin
     .firestore()
     .collection("admins")
-    .where("adminEmail", "==", adminEmail)
+    .where("email", "==", email)
     .get();
 
   return !existingAdmin.empty;
 }
 
-async function checkExistingAdminByPhoneNumber(adminPhoneNumber) {
+async function checkExistingAdminByPhoneNumber(phoneNumber) {
   const existingAdmin = await admin
     .firestore()
     .collection("admins")
-    .where("adminPhoneNumber", "==", adminPhoneNumber)
+    .where("phoneNumber", "==", phoneNumber)
     .get();
 
   return !existingAdmin.empty;

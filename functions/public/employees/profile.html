@@ -7,18 +7,17 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/7.1.0/mdb.min.css" rel="stylesheet" />
     <link rel="icon" type="image/x-icon" href="https://i.postimg.cc/W1qxgjkZ/logo.jpg">
     <link rel="stylesheet" href="/css/employeeProfileStyle.css">
-    <title>Employee Profile Page</title>
+    <title>Profile Page</title>
     <style>
-        .about-avatar {
-    height: 100%; /* Match the height of the about text container */
-}
+    .about-avatar {
+        height: 100%; /* Match the height of the about text container */
+    }
 
-.about-avatar img {
-    height: 350px; /* Ensure the image fills its container */
-    width: auto; /* Allow the width to adjust proportionally */
-    max-width: 100%; /* Ensure the image does not exceed its container's width */
-}
-
+    .about-avatar img {
+        height: 350px; /* Ensure the image fills its container */
+        width: auto; /* Allow the width to adjust proportionally */
+        max-width: 100%; /* Ensure the image does not exceed its container's width */
+    }
     </style>
 </head>
 
@@ -88,38 +87,46 @@
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf-lib/1.20.0/pdf-lib.min.js"></script>
 <script>
-// employeeProfilePage.js
+// profile.js
+
 document.addEventListener('DOMContentLoaded', async function () {
     try {
-        const response = await fetch('/api/employee-profile', {
+        const token = sessionStorage.getItem('employeeToken');
+        console.log(token);
+        if (!token) {
+            throw new Error('No token found.');
+        }
+
+        const response = await fetch('/api/profile', {
             method: 'GET',
             headers: {
-                'Authorization': `Bearer ${sessionStorage.getItem('employeeToken')}`
+                'Authorization': `Bearer ${token}`
             }
         });
 
         if (!response.ok) {
-            throw new Error('Failed to fetch employee profile.');
+            throw new Error('Failed to fetch profile.');
         }
 
         const data = await response.json();
-        const employee = data.employee;
-        console.log(employee);
+        console.log(data);
+        const user = data.user;
+        console.log(user);
 
-        // Update DOM elements with employee data
-        document.getElementById('firstName').textContent = employee.firstName;
-        document.getElementById('role').textContent = employee.role;
-        document.getElementById('birthday').textContent = formatDate(employee.employeeDOB);
-        document.getElementById('age').textContent = calculateAge(employee.employeeDOB);
-        document.getElementById('maritalStatus').textContent = employee.maritalStatus;
-        document.getElementById('gender').textContent = employee.gender;
-        document.getElementById('email').textContent = employee.employeeEmail;
-        document.getElementById('phoneNumber').textContent = employee.employeePhoneNumber;
-        document.getElementById('emergencyPhoneNumber').textContent = employee.employeeEmergencyPhoneNumber;
-        document.getElementById('profilePic').src = employee.photoUrl;
-        document.getElementById('joiningDate').textContent = formatJoiningDate(employee.joiningDate);
+        // Update DOM elements with user data
+        document.getElementById('firstName').textContent = user.firstName;
+        document.getElementById('role').textContent = user.role;
+        document.getElementById('birthday').textContent = formatDate(user.birthday);
+        document.getElementById('age').textContent = calculateAge(user.birthday);
+        document.getElementById('maritalStatus').textContent = user.maritalStatus;
+        document.getElementById('gender').textContent = user.gender;
+        document.getElementById('email').textContent = user.email;
+        document.getElementById('phoneNumber').textContent = user.phoneNumber;
+        document.getElementById('emergencyPhoneNumber').textContent = user.emergencyPhoneNumber;
+        document.getElementById('joiningDate').textContent = formatJoiningDate(user.joiningDate);
+        document.getElementById('profilePic').src = user.photoUrl;
     } catch (error) {
-        console.error('Error fetching employee profile:', error);
+        console.error('Error fetching profile:', error);
         // Handle error, e.g., display error message to the user
     }
 });
@@ -157,7 +164,6 @@ function formatJoiningDate(joiningDateResponse) {
         return 'Invalid Date';
     }
 }
-
 
 
 

@@ -6,52 +6,63 @@ const bcrypt = require('bcryptjs');
 
 module.exports = {
   handleAdminRegistration: async function (req, res) {
-  try {
-    // Access request body properties and trim leading/trailing spaces
-    const adminName = req.body.adminName.trim();
-    const adminEmail = req.body.adminEmail.trim();
-    const adminPhoneNumber = req.body.adminPhoneNumber.trim();
-    const pin = req.body.pin.trim();
+    try {
+      // Access request body properties and trim leading/trailing spaces
+      const firstName = req.body.firstName.trim().toLowerCase();
+      const lastName = req.body.lastName.trim().toLowerCase();
+      const email = req.body.email.trim().toLowerCase();
+      const birthday = req.body.birthday.trim().toLowerCase();
+      const phoneNumber = req.body.phoneNumber.trim().toLowerCase();
+      const pin = req.body.pin.trim().toLowerCase();
+      const role = req.body.role.trim().toLowerCase();
+      const maritalStatus = req.body.maritalStatus.trim().toLowerCase();
+      const gender = req.body.gender.trim().toLowerCase();
+      const emergencyPhoneNumber = req.body.emergencyPhoneNumber.trim().toLowerCase();
 
-    // Check if required fields are provided
-    if (!(adminName && adminEmail && adminPhoneNumber && pin)) {
-      return res.status(400).json({ error: 'All fields are required' });
-    }
+      // Check if required fields are provided
+      if (!(firstName && lastName && email && birthday && phoneNumber && pin && role && maritalStatus && gender && emergencyPhoneNumber)) {
+        return res.status(400).json({ error: 'All fields are required' });
+      }
 
-    // Check if the user already exists with the provided email
-    const emailExists = await checkExistingAdminByEmail(adminEmail);
-    if (emailExists) {
-      return res.status(401).json({ message: "Admin already exists with this email." });
-    }
-    
-    // Check if the user already exists with the provided mobile number
-    const mobileNumberExists = await checkExistingAdminByPhoneNumber(adminPhoneNumber);
-    if (mobileNumberExists) {
-      return res.status(401).json({ message: "Admin already exists with this mobile number." });
-    }
-
-    // Hash the admin's password
-    const hashedPin = await bcrypt.hash(pin, 10);
+      // Check if the user already exists with the provided email
+      const emailExists = await checkExistingAdminByEmail(email);
+      if (emailExists) {
+        return res.status(401).json({ message: "Admin already exists with this email." });
+      }
       
-    // Generate a unique admin ID
-    const adminId = "admin" + generateNumericId();
+      // Check if the user already exists with the provided mobile number
+      const mobileNumberExists = await checkExistingAdminByPhoneNumber(phoneNumber);
+      if (mobileNumberExists) {
+        return res.status(401).json({ message: "Admin already exists with this mobile number." });
+      }
 
-    // Save admin data to the database
-    const adminData = { 
-      adminId,
-      adminName,
-      adminEmail,
-      adminPhoneNumber,
-      pin: hashedPin // Saving the hashed password
-    };
+      // Hash the admin's password
+      const hashedPin = await bcrypt.hash(pin, 10);
+        
+      // Generate a unique admin ID
+      const adminId = "admin" + generateNumericId();
 
-    await saveAdminData(adminId, adminData);
+      // Create an object with lowercase values
+      const adminData = {
+        adminId,
+        firstName,
+        lastName,
+        email,
+        phoneNumber,
+        pin: hashedPin, // Saving the hashed password
+        role,
+        birthday,
+        maritalStatus,
+        gender,
+        emergencyPhoneNumber
+      };
 
-    return res.status(201).json({ message: 'Admin data saved successfully'});
-  } catch (error) {
-    console.error('Error handling admin registration:', error);
-    return res.status(500).json({ error: 'Internal server error' });
+      await saveAdminData(adminId, adminData);
+
+      return res.status(201).json({ message: 'Admin data saved successfully'});
+    } catch (error) {
+      console.error('Error handling admin registration:', error);
+      return res.status(500).json({ error: 'Internal server error' });
+    }
   }
-}
-
 };

@@ -12,12 +12,12 @@ document.getElementById("employeeLoginForm").addEventListener("submit", async fu
             headers: {
                 "Content-Type": "application/json"
             },
-            body: JSON.stringify({ employeePhoneNumber: phoneNumber, pin: pin, rememberMe: rememberMe }) // Include rememberMe in the request body
+            body: JSON.stringify({ phoneNumber: phoneNumber, pin: pin, rememberMe: rememberMe }) // Include rememberMe in the request body
         });
 
         const data = await response.json();
-        console.log(data.employeeId)
-        console.log(`/employee/${data.employeeId}/employee-profile`);
+        // console.log(data.employeeId)
+        // console.log(`/employee/${data.employeeId}/employee-profile`);
 
         if (response.ok) {
             // Success
@@ -28,7 +28,8 @@ document.getElementById("employeeLoginForm").addEventListener("submit", async fu
                 confirmButtonColor: "#3dc944",
             }).then(() => {
                 // Redirect to employee profile with employeeId included in the URL
-                window.location.href = `/employee/${data.employeeId}/employee-profile`;
+                // window.location.href = `/employee/${data.employeeId}/employee-profile`;
+                window.location.href = `/employee/dashboard`;
             });
             // Store token in sessionStorage
             sessionStorage.setItem('employeeToken', data.token);

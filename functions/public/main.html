@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Prevent right click -->
+
+    <!-- <link rel="icon" type="image/x-icon" href="/gss/images/logo.jpg"> -->
+    <link rel="stylesheet" href="/mainStyles.css">
+    <title>Panel</title>
+
+    <!-- Reload page once -->
+    <script>
+        // Refresh the page only once
+        if (!sessionStorage.getItem('hasReloaded')) {
+            sessionStorage.setItem('hasReloaded', 'true');
+            window.location.reload();
+        }
+    </script>
+
+</head>
+
+<body>
+    <div id="left-sidebar">
+        <!-- Menu items 1 with submenus -->
+        <div class="text-center">
+            <h3 class="text-center">Dashboard</h3>
+        </div>
+        <div class="menu-item">
+            <div class="menu-icon">▶</div> Employee
+        </div>
+
+        <div class="submenu">
+            <div class="submenu-item"><a href="/employee/dashboard/employee-profile">Employee Profile</a></div>
+            <div class="submenu-item"><a href="/employee/dashboard/employee-search">Employee Search</a></div>
+            <div class="submenu-item"><a href="/employee/dashboard/getall-employees">Get all employees</a></div>
+            <div class="submenu-item"><a href="/employee/dashboard/add-employee">Add Employee</a></div>
+        </div>
+
+
+        <!-- Menu Item 4 Logout -->
+        <div class="menu-item">
+            <a href="/api/employee-logout">Logout</a>
+        </div>
+    </div>
+
+    <div id="content">
+        <iframe name="content" id="content-frame" width="100%" height="100%" frameborder="0"></iframe>
+    </div>
+
+    <script>
+        // JavaScript code to handle submenu toggling
+        const menuItems = document.querySelectorAll('.menu-item');
+        menuItems.forEach((menuItem) => {
+            menuItem.addEventListener('click', () => {
+                const submenu = menuItem.nextElementSibling;
+                menuItem.classList.toggle('open');
+                submenu.style.display = submenu.style.display === 'block' ? 'none' : 'block';
+            });
+        });
+
+        // Update iframe src based on clicked link
+        function loadContentFromLink(link) {
+            const iframe = document.getElementById('content-frame');
+            iframe.src = link.href;
+        }
+
+        // Load content from clicked link on initial page load
+        document.addEventListener('DOMContentLoaded', function() {
+            const links = document.querySelectorAll('.submenu-item a');
+            links.forEach(link => {
+                link.addEventListener('click', function(event) {
+                    event.preventDefault();
+                    loadContentFromLink(this);
+                });
+            });
+        });
+
+        // Set iframe src to employee-profile on initial page load
+        window.addEventListener('DOMContentLoaded', function() {
+            const iframe = document.getElementById('content-frame');
+            iframe.src = '/admin/dashboard/admin-profile';
+        });
+
+        // Remove '#' from URL when the page is reloaded
+        if (window.location.hash === '#') {
+            history.replaceState('', document.title, window.location.pathname);
+        }
+    </script>
+</body>
+
+</html>
