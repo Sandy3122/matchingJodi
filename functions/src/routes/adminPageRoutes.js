@@ -24,7 +24,7 @@ router.get("/admin-login", (req, res, next) => {
 });
 
 // Define route to serve employee profile page
-router.get('/dashboard', isAdmin, (req, res) => {
+router.get('/dashboard', (req, res) => {
     // Check if user is authenticated
     if (!req.session.adminToken) {
       // If authenticated, redirect or any authenticated route
@@ -34,7 +34,7 @@ router.get('/dashboard', isAdmin, (req, res) => {
 });
 
 // Define route to serve employee profile page
-router.get('/access-rights', isAdmin, (req, res) => {
+router.get('/access-rights', (req, res) => {
   res.sendFile(path.join(__dirname, '..', '..', 'public', 'employees', 'accessRights.html'));
 });
 

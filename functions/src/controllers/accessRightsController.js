@@ -45,5 +45,40 @@ module.exports = {
             console.error('Error updating access right routes:', error);
             res.status(500).json({ error: 'Internal server error' });
         }
+    },
+
+    addRoleRights: async function(req, res) {
+        const { role, status } = req.body;
+        const routeName = []; // Empty array for routeName
+    
+        try {
+            // Add the role rights data to the Firestore collection
+            const docRef = await db.collection('accessRights').add({
+                role,
+                routeName,
+                status
+            });
+    
+            res.status(201).json({ message: 'Role rights added successfully', id: docRef.id });
+        } catch (error) {
+            console.error('Error adding role rights:', error);
+            res.status(500).json({ error: 'Internal server error' });
+        }
+    },
+
+    deleteAccessRight: async function(req, res) {
+        const accessRightId = req.params.accessRightId;
+    
+        try {
+            // Delete the access right from the Firestore collection
+            await db.collection('accessRights').doc(accessRightId).delete();
+    
+            res.status(200).json({ message: 'Access right deleted successfully' });
+        } catch (error) {
+            console.error('Error deleting access right:', error);
+            res.status(500).json({ error: 'Internal server error' });
+        }
     }
+    
+    
 };

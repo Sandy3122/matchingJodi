@@ -14,6 +14,9 @@ router.post('/admin-login', handleAdminLogin);
 // Admin logout route
 router.get('/admin-logout', handleAdminLogout);
 
+// add access rights
+router.post('/access-rights', accessRightsController.addRoleRights);
+
 // Get all access rights
 router.get('/access-rights', accessRightsController.getAllAccessRights);
 
@@ -22,5 +25,8 @@ router.patch('/access-rights/:accessRightId/status', accessRightsController.upda
 
 // Update access right routes
 router.patch('/access-rights/:accessRightId/routes', accessRightsController.updateAccessRightRoutes);
+
+// Delete access right routes
+router.delete('/access-rights/:accessRightId', accessRightsController.deleteAccessRight);
 
 module.exports = router;

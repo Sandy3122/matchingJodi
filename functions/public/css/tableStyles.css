@@ -89,3 +89,7 @@ body {
 .wrap-text {
     white-space: pre-wrap !important;
 }
+
+#accessed-routes {
+    width: 400px !important;
+}
