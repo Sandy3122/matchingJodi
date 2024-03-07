@@ -16,7 +16,7 @@ document.getElementById("employeeLoginForm").addEventListener("submit", async fu
         });
 
         const data = await response.json();
-        // console.log(data.employeeId)
+        console.log("Employee Data: ", data)
         // console.log(`/employee/${data.employeeId}/employee-profile`);
 
         if (response.ok) {
@@ -33,6 +33,7 @@ document.getElementById("employeeLoginForm").addEventListener("submit", async fu
             });
             // Store token in sessionStorage
             sessionStorage.setItem('employeeToken', data.token);
+            sessionStorage.setItem('employeeRole', data.role)
         } else {
             // Error
             Swal.fire({

@@ -6,6 +6,8 @@
     "serve": "firebase emulators:start --only functions",
     "shell": "firebase functions:shell",
     "start": "npm run shell",
+    "prod": "node index.js",
+    "dev": "nodemon index.js",
     "deploy": "firebase deploy --only functions",
     "logs": "firebase functions:log"
   },

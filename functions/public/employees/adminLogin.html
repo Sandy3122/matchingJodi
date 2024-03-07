@@ -112,6 +112,7 @@ document.getElementById("adminLoginForm").addEventListener("submit", async funct
         });
 
         const data = await response.json();
+        console.log("Admin Data: ", data)
 
         if (response.ok) {
             // Success
@@ -124,6 +125,9 @@ document.getElementById("adminLoginForm").addEventListener("submit", async funct
                 // Redirect or perform any other action after successful login
                 window.location.href = "/admin/dashboard";
             });
+            // Store token in sessionStorage
+            sessionStorage.setItem('adminToken', data.token);
+            sessionStorage.setItem('adminRole', data.role);
         } else {
             // Error
             Swal.fire({

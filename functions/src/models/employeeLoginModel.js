@@ -14,7 +14,7 @@ async function getEmployeeByPhoneNumber(phoneNumber) {
         return null;
     } catch (error) {
         console.error('Error fetching employee by phone number:', error);
-        throw new Error('An error occurred while fetching admin data. Please try again later.'); // Informative error message
+        throw new Error(  'An error occurred while fetching admin data. Please try again later.'); // Informative error message
     }
 }
 

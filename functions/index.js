@@ -8,7 +8,6 @@ const bodyParser = require("body-parser");
 const session = require('express-session'); // Import express-session
 const serviceAccount = require('./serviceAccountKey.json')
 
-
 dotenv.config();
 
 // Initialize Firebase app if it's not already initialized
@@ -19,15 +18,7 @@ if (!admin.apps.length) {
   });
 }
 
-app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
-app.use(cors());
-app.use(cookieParser());
-app.use(express.static('public'));
-
-// Configure express-session
+// Configure express-session before any routes
 app.use(session({
   secret: process.env.SESSION_SECRET_KEY, // Change this to a secure random string
   resave: false,
@@ -37,8 +28,15 @@ app.use(session({
   }
 }));
 
+app.use(express.json());
+app.use(express.urlencoded({ extended: false }));
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(cors());
+app.use(cookieParser());
+app.use(express.static('public'));
 
-
+// Import routes after initializing express-session
 const userRoutes = require("./src/routes/userRoutes");
 const employeePageRoutes = require("./src/routes/employeePageRoutes");
 const supportRequestFormRoutes = require("./src/routes/supportRequestRoutes");

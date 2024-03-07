@@ -1,0 +1,91 @@
+/* Custom scrollbar styles */
+::-webkit-scrollbar {
+    width: 6px; /* Setting the width of the scrollbar */
+    height: 4px;
+}
+
+::-webkit-scrollbar-track {
+    background: #f1f1f1; /* Setting the background color of the track */
+}
+
+::-webkit-scrollbar-thumb {
+    background: #888; /* Setting the color of the scrollbar thumb */
+    border-radius: 5px; /* Setting the border radius of the scrollbar thumb */
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #555; /* Setting the color of the scrollbar thumb on hover */
+}
+
+.status-active {
+    color: green !important;
+}
+
+.status-inactive {
+    color: red !important;
+}
+
+.role-user {
+    color: blue !important;
+}
+
+.role-employee {
+    color: orange !important;
+}
+
+.role-manager {
+    color: purple !important;
+}
+
+.role-admin {
+    color: red !important;
+}
+
+.role-super-admin {
+    color: gold !important;
+}
+
+.role-third-party-agent {
+    color: grey !important;
+}
+
+body {
+    background-color: #f8f9fa; /* Setting a light background color */
+}
+
+.container-fluid {
+    padding-top: 30px; /* Adding some padding to the top */
+}
+
+.table {
+    background-color: #fff; /* Setting a white background for the table */
+}
+
+.table thead th {
+    border-bottom: none; /* Removing border-bottom for table header */
+}
+
+.table tbody tr {
+    border-bottom: 1px solid #dee2e6; /* Adding a bottom border for table rows */
+}
+
+/* .table-bordered th,
+.table-bordered td {
+    border: none;
+}
+
+.table-bordered {
+    border: none;
+} */
+
+.route-names {
+    display: block !important;
+}
+
+.checkbox-wrapper {
+    margin-bottom: 5px !important; /* Adjust as needed */
+}
+
+.wrap-text {
+    white-space: pre-wrap !important;
+}

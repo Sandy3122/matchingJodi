@@ -1,8 +1,7 @@
-// admin login controller
+// adminLoginController.js
 const { getAdminByPhoneNumber } = require("../models/adminLoginModel");
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
-
 const secretKey = process.env.SECRET_KEY;
 
 module.exports = {
@@ -22,21 +21,20 @@ module.exports = {
       if (!isPinValid) {
         return res.status(401).json({ message: 'Invalid phone number or PIN.' });
       }
-  
-      // Determine user role
-      const role = 'admin';
-      
+
       // Generate JWT token with user type as the role
-      const adminToken = jwt.sign({ id: admin.adminId, role: role }, secretKey, { expiresIn: '30m' });
+      const adminToken = jwt.sign({ id: admin.adminId, adminRole: admin.role }, secretKey, { expiresIn: '30m' });
 
       // Store token in session or response body as needed
       req.session.adminToken = adminToken;
+      req.session.adminRole = admin.role;
   
       // Return the token or any other relevant data
       return res.status(200).json({
         message: "Admin Login Successful",
         token: adminToken,
-        adminId: admin.adminId
+        adminId: admin.adminId, // Include the adminId in the response
+        role: req.session.adminRole // Include the role in the response
       });
     } catch (error) {
       console.error('Error logging in:', error);
@@ -45,12 +43,12 @@ module.exports = {
   },  
 
   // Admin Logout route
-handleAdminLogout: function(req, res) {
-  // Clear the adminToken from the session
-  delete req.session.adminToken;
+  handleAdminLogout: function(req, res) {
+    // Clear the token and role from the session
+    delete req.session.adminToken;
+    delete req.session.adminRole;
 
-  // Redirect to admin login page after logout
-  res.redirect('/admin/admin-login');
-}
-
+    // Redirect to admin login page after logout
+    res.redirect('/admin/admin-login');
+  }
 };

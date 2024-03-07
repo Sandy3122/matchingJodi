@@ -121,3 +121,13 @@ color: #fc5356;
 .dark-color {
 color: #20247b;
 }
+
+.about-avatar {
+    height: 100%; /* Match the height of the about text container */
+}
+
+.about-avatar img {
+    height: 350px; /* Ensure the image fills its container */
+    width: auto; /* Allow the width to adjust proportionally */
+    max-width: 100%; /* Ensure the image does not exceed its container's width */
+}

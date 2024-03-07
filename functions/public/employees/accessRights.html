@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Access Rights Dashboard</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/css/tableStyles.css">
+    <style>
+        /* Custom CSS for fixing Accessed Routes column */
+        #accessed-routes {
+            width: 400px !important;
+        }
+    </style>
+</head>
+<body>
+    <div class="container-fluid mt-2">
+        <!-- <h1 class="text-center mb-4">Access Rights Management</h1> -->
+        <div class="row">
+            <div class="col-md-12">
+                <h3>Access Rights Table</h3>
+                <div class="table-responsive vh-100">
+                    <table class="table table-striped table-bordered">
+                        <thead class="table-dark">
+                            <tr class="tr">
+                                <th>S.no</th>
+                                <th>Role</th>
+                                <th>Status</th>
+                                <th id="accessed-routes">Accessed Routes</th>
+                                <th>Actions</th>
+                                <th>Routes</th>
+                                <!-- New column for displaying routes -->
+                            </tr>
+                        </thead>
+                        <tbody id="accessRightsTableBody">
+                            <!-- Access rights details will be dynamically inserted here -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+
+<!-- Bootstrap JS (optional if you require dropdowns, modals, etc.) -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+<!-- Include employeeRoutes.js file -->
+<script src="/js/employeeRoutes.js"></script>
+
+<script>
+async function updateAccessRightStatus(accessRightId, status) {
+    try {
+        const response = await fetch(`/api/access-rights/${accessRightId}/status`, {
+            method: "PATCH",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ status }),
+        });
+
+        if (!response.ok) {
+            throw new Error("Failed to update access right status");
+        }
+
+        const data = await response.json();
+
+        // Update the status in the table cell
+        const statusCell = document.querySelector(`#status-${accessRightId}`);
+        statusCell.textContent = status;
+        statusCell.className = status === "active" ? "status-active" : "status-inactive";
+        console.log("Access right status updated successfully:", data);
+    } catch (error) {
+        console.error("Error updating access right status:", error);
+    }
+}
+
+async function updateAccessRightRoutes(accessRightId) {
+    const routeName = [];
+    document.querySelectorAll(`#routeCheckbox-${accessRightId}:checked`).forEach(checkbox => {
+        routeName.push(checkbox.value);
+    });
+
+    try {
+        const response = await fetch(`/api/access-rights/${accessRightId}/routes`, {
+            method: "PATCH",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ routeName }),
+        });
+
+        if (!response.ok) {
+            throw new Error("Failed to update access right routes");
+        }
+
+        const data = await response.json();
+
+        // Update the displayed route names without checkboxes
+        const routeNamesCell = document.querySelector(`#routeNames-${accessRightId}`);
+        routeNamesCell.textContent = routeName.join(", ");
+        console.log("Access right routes updated successfully:", data);
+    } catch (error) {
+        console.error("Error updating access right routes:", error);
+    }
+}
+
+// Add event listeners to checkboxes to trigger updateAccessRightRoutes function
+function addCheckboxEventListeners() {
+    const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+    checkboxes.forEach(checkbox => {
+        checkbox.addEventListener('click', function() {
+            const accessRightId = this.id.split('-')[1];
+            updateAccessRightRoutes(accessRightId);
+        });
+    });
+}
+
+// Call addCheckboxEventListeners after fetching access rights to ensure checkboxes are properly initialized
+async function fetchAccessRights() {
+    const accessRightsTableBody = document.getElementById("accessRightsTableBody");
+    try {
+        const response = await fetch("/api/access-rights");
+        const data = await response.json();
+        accessRightsTableBody.innerHTML = "";
+
+        data.forEach((accessRight, index) => {
+    const row = document.createElement("tr");
+    row.innerHTML = `
+        <td>${index + 1}</td>
+        <td>${accessRight.role}</td>
+        <td id="status-${accessRight.id}" class="${accessRight.status === "active" ? "status-active" : "status-inactive"}">${accessRight.status}</td>
+        <td id="routeNames-${accessRight.id}">${generateRouteName(accessRight.routeName)}</td>
+        <td style="text-align: center;"
+            <div class="dropdown">
+                <button class="btn btn-secondary dropdown-toggle" type="button" id="actionsDropdown-${accessRight.id}" data-bs-toggle="dropdown" aria-expanded="false">
+                    Actions
+                </button>
+                <ul class="dropdown-menu dropdown-menu-start position-absolute" aria-labelledby="actionsDropdown-${accessRight.id}">
+                    <li><a class="dropdown-item" href="#" onclick="updateAccessRightStatus('${accessRight.id}', 'active')">Activate</a></li>
+                    <li><a class="dropdown-item" href="#" onclick="updateAccessRightStatus('${accessRight.id}', 'inactive')">Deactivate</a></li>
+                </ul>
+            </div>
+        </td>
+        <td>
+            ${generateRouteCheckboxes(accessRight.routeName, accessRight.id)}
+        </td>
+    `;
+    accessRightsTableBody.appendChild(row);
+});
+
+        // Add event listeners to checkboxes
+        addCheckboxEventListeners();
+    } catch (error) {
+        console.error("Error fetching access rights:", error);
+    }
+}
+
+function generateRouteCheckboxes(routeName, accessRightId) {
+    let checkboxesHTML = "";
+    employeeRoutes.forEach(route => {
+        checkboxesHTML += `
+            <div class="checkbox-wrapper">
+                <label class="checkbox-inline">
+                    <input type="checkbox" id="routeCheckbox-${accessRightId}" value="${route}" ${routeName.includes(route) ? 'checked' : ''}> ${route}
+                </label>
+            </div>
+        `;
+    });
+    return checkboxesHTML;
+}
+
+function generateRouteName(routeName) {
+    let routeHTML = "";
+    routeName.forEach(route => {
+        routeHTML += `<span style="display: block;">${route}</span>`;
+    });
+    return routeHTML;
+}
+
+
+
+fetchAccessRights();
+</script>
+</body>
+</html>

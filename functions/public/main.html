@@ -33,16 +33,17 @@
         </div>
 
         <div class="submenu">
-            <div class="submenu-item"><a href="/employee/dashboard/employee-profile">Employee Profile</a></div>
-            <div class="submenu-item"><a href="/employee/dashboard/employee-search">Employee Search</a></div>
-            <div class="submenu-item"><a href="/employee/dashboard/getall-employees">Get all employees</a></div>
+            <div class="submenu-item"><a href="/api/dashboard/profile">Employee Profile</a></div>
+            <div class="submenu-item"><a href="/api/dashboard/employee-search">Employee Search</a></div>
+            <div class="submenu-item"><a href="/api/dashboard/getall-employees">Get all employees</a></div>
+            <div class="submenu-item"><a href="/admin/access-rights">Access Rights</a></div>
             <div class="submenu-item"><a href="/employee/dashboard/add-employee">Add Employee</a></div>
         </div>
 
 
         <!-- Menu Item 4 Logout -->
         <div class="menu-item">
-            <a href="/api/employee-logout">Logout</a>
+            <a href="/api/admin-logout">Logout</a>
         </div>
     </div>
 
@@ -81,7 +82,7 @@
         // Set iframe src to employee-profile on initial page load
         window.addEventListener('DOMContentLoaded', function() {
             const iframe = document.getElementById('content-frame');
-            iframe.src = '/admin/dashboard/admin-profile';
+            iframe.src = '/api/dashboard/profile';
         });
 
         // Remove '#' from URL when the page is reloaded

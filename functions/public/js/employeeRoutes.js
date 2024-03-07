@@ -1,10 +1,11 @@
 // employeeRoutes.js
 
-const allEmployeeRoutes = [
+const employeeRoutes = [
   "/employee-search",
   "/getall-employee",
+  "/profile",
   "/employees"
   
 ];
 
-module.exports = allEmployeeRoutes;
+module.exports = employeeRoutes;

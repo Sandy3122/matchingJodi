@@ -1,5 +1,3 @@
-// authMiddleware.js
-
 const jwt = require('jsonwebtoken');
 const secretKey = process.env.SECRET_KEY;
 
@@ -7,10 +5,10 @@ function authenticateToken(req, res, next) {
     let token;
     if (req.session.employeeToken) {
         token = req.session.employeeToken;
-        // console.log("Employee",token);
+        req.session.employeeRole = 'employee'; // Set role in session for employee login
     } else if (req.session.adminToken) {
         token = req.session.adminToken;
-        // console.log("Admin",token);
+        req.session.adminRole = 'admin'; // Set role in session for admin login
     } else {
         return res.status(401).json({ message: 'Authentication required.' });
     }
