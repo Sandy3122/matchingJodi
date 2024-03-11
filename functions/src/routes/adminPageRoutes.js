@@ -1,3 +1,4 @@
+// admin page routes
 const router = require('express').Router();
 const path = require("path");
 
@@ -12,7 +13,7 @@ const isAdmin = (req, res, next) => {
   }
 };
 
-// Employee Login route
+// Admin Login route
 router.get("/admin-login", (req, res, next) => {
   // Check if user is authenticated
   if (req.session.adminToken) {

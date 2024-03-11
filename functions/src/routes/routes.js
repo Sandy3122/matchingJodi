@@ -1,13 +1,10 @@
-// admin routes
+// general routes
 const express = require('express');
 const router = express.Router();
 const path = require("path");
 const { getUserProfile } = require('../controllers/userProfileController'); // Import the getEmployeeProfile controller
 const { authenticateToken } = require('../utilities/verifyToken'); // Import the authenticateToken middleware
 
-
-// Admin profile route (requires authentication)
-// router.get('/profile', authenticateToken, getAdminProfile);
 
 // Employee profile route (requires authentication)
 router.get('/profile', authenticateToken, getUserProfile);

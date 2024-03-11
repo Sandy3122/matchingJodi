@@ -1,3 +1,5 @@
+// employee routes
+
 const express = require('express');
 const router = express.Router();
 const { handleEmployeeRegistration } = require('../controllers/employeeRegistrationController');

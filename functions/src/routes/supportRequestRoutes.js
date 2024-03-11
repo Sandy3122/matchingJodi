@@ -1,3 +1,5 @@
+// support request route
+
 const express = require("express");
 const router = express.Router();
 const { sendSupportFormData } = require("../controllers/supportRequestController");
@@ -12,4 +14,5 @@ router.get("/env", (req, res) => {
 router.post("/sendSupportFormData", sendSupportFormData);
 
 module.exports = router;
+
 

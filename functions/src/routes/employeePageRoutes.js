@@ -1,3 +1,5 @@
+// employee page routes
+
 const express = require("express");
 const router = express.Router();
 const path = require("path");
@@ -5,7 +7,7 @@ const path = require("path");
 
 // Employee Registration route
 router.get("/employee-registration", (req, res) => {
-  res.sendFile(path.join(__dirname, "..", "..", "public", "employees", "employeeRegistration.html"));
+  res.sendFile(path.join(__dirname, "..", "..", "public", "employeeRegistration.html"));
 });
 
 // Employee Login route

@@ -1,5 +1,6 @@
 const express = require("express");
 const app = express();
+const functions = require("firebase-functions");
 const dotenv = require("dotenv");
 const cors = require("cors");
 const admin = require("firebase-admin");
@@ -7,8 +8,15 @@ const cookieParser = require("cookie-parser");
 const bodyParser = require("body-parser");
 const session = require('express-session'); // Import express-session
 const serviceAccount = require('./serviceAccountKey.json')
+const path = require("path"); // Import path module to handle file paths
 
 dotenv.config();
+
+app.use((req, res, next) => {
+  res.setHeader('Content-Security-Policy', "font-src 'self' data:;"); // Allow fonts to be loaded from the same origin and data URIs
+  next();
+});
+
 
 // Initialize Firebase app if it's not already initialized
 if (!admin.apps.length) {
@@ -28,6 +36,7 @@ app.use(session({
   }
 }));
 
+app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(bodyParser.json());
@@ -45,13 +54,18 @@ const routes = require('./src/routes/routes');
 const adminRoutes = require('./src/routes/adminRoutes');
 const adminPageRoutes = require('./src/routes/adminPageRoutes');
 
-app.use("/users", userRoutes);
+app.use("/", userRoutes);
 app.use("/employee", employeePageRoutes);
 app.use("/admin", adminPageRoutes);
 app.use("/support", supportRequestFormRoutes);
 app.use('/api', employeeRoutes);
 app.use('/api', adminRoutes);
 app.use('/api', routes);
+
+app.get('/testing', (req, res) => {
+  // Handle the request for /testing here
+  res.send('This is the testing page');
+});
 
 const PORT = process.env.PORT || 8080;
 app.listen(PORT, () => {
