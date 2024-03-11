@@ -42,9 +42,7 @@ fetch("/support/env")
     console.error("Error fetching environment variables:", error)
   );
 
-  function showMsg91Window() {
-    alert("testing");
-  
+  function showMsg91Window() {  
     var phone = phoneField.value.trim();
   
     if (phone !== "") {
