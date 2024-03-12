@@ -7,7 +7,7 @@ const path = require("path");
 
 // Employee Registration route
 router.get("/employee-registration", (req, res) => {
-  res.sendFile(path.join(__dirname, "..", "..", "public", "employeeRegistration.html"));
+  res.sendFile(path.join(__dirname, "..", "..", "public", "employees", "employeeRegistration.html"));
 });
 
 // Employee Login route

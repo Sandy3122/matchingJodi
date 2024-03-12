@@ -8,4 +8,4 @@ const employeeRoutes = [
   
 ];
 
-module.exports = employeeRoutes;
+// module.exports = employeeRoutes;

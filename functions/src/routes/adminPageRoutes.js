@@ -21,7 +21,7 @@ router.get("/admin-login", (req, res, next) => {
     return res.redirect("/admin/dashboard");
   }
   // If not authenticated, serve the login page
-  res.sendFile(path.join(__dirname, "..", "..", "public", "employees", "adminLogin.html"));
+  res.sendFile(path.join(__dirname, "..", "..", "public", "admin", "adminLogin.html"));
 });
 
 // Define route to serve employee profile page
