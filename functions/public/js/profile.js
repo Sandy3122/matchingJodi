@@ -1,20 +1,18 @@
 // profile.js
 document.addEventListener('DOMContentLoaded', async function () {
     try {
-        let token, userRole; // Define userRole variable
+        let token, userRole;
         if (sessionStorage.getItem("adminToken")) {
             token = sessionStorage.getItem('adminToken');
-            userRole = 'admin'; // Assign userRole as admin
-            console.log("Admin Role: ", userRole);
+            userRole = 'admin'; // Set userRole for admin
             console.log("Admin Token: ", token);
         } else if (sessionStorage.getItem("employeeToken")) {
             token = sessionStorage.getItem('employeeToken');
-            userRole = 'employee'; // Assign userRole as employee
-            console.log("Employee Role: ", userRole);
+            userRole = 'employee'; // Set userRole for employee
             console.log("Employee Token: ", token);
         }
 
-        // Check if userRole is available
+        // Check if token or userRole is not available
         if (!token || !userRole) {
             throw new Error('No token or role found.');
         }
@@ -30,58 +28,51 @@ document.addEventListener('DOMContentLoaded', async function () {
             throw new Error('Failed to fetch profile.');
         }
 
-        
+        const data = await response.json();
+        const user = data.user;
 
-// Update DOM elements with user data based on userRole
-if (userRole === 'admin') {
-    const data = await response.json();
-    const adminData = data.adminData;
-    if (!adminData) {
-        throw new Error('Admin data not found in response.');
-    }
-    console.log(adminData.role)
-    // Display admin profile details
-    document.getElementById('firstName').textContent = adminData.firstName;
-    document.getElementById('role').textContent = adminData.role;
-    document.getElementById('birthday').textContent = formatDate(adminData.birthday);
-    document.getElementById('age').textContent = calculateAge(adminData.birthday);
-    document.getElementById('maritalStatus').textContent = adminData.maritalStatus;
-    document.getElementById('gender').textContent = adminData.gender;
-    document.getElementById('email').textContent = adminData.email;
-    document.getElementById('phoneNumber').textContent = adminData.phoneNumber;
-    document.getElementById('emergencyPhoneNumber').textContent = adminData.emergencyPhoneNumber;
-    document.getElementById('joiningDate').textContent = formatJoiningDate(adminData.joiningDate);
-    document.getElementById('profilePic').src = 'https://img.freepik.com/premium-vector/businessman-avatar-cartoon-character-profile_18591-50139.jpg';
-    // Add other admin-specific fields here
-} else if (userRole === 'employee') {
-    const data = await response.json();
-    const employeeData = data.employeeData;
-    if (!employeeData) {
-        throw new Error('Employee data not found in response.');
-    }
-    console.log(employeeData.role);
-    // Display employee profile details
-    document.getElementById('firstName').textContent = employeeData.firstName;
-    document.getElementById('role').textContent = employeeData.role;
-    document.getElementById('birthday').textContent = formatDate(employeeData.birthday);
-    document.getElementById('age').textContent = calculateAge(employeeData.birthday);
-    document.getElementById('maritalStatus').textContent = employeeData.maritalStatus;
-    document.getElementById('gender').textContent = employeeData.gender;
-    document.getElementById('email').textContent = employeeData.email;
-    document.getElementById('phoneNumber').textContent = employeeData.phoneNumber;
-    document.getElementById('emergencyPhoneNumber').textContent = employeeData.emergencyPhoneNumber;
-    document.getElementById('joiningDate').textContent = formatJoiningDate(employeeData.joiningDate);
-    document.getElementById('profilePic').src = employeeData.photoUrl;
-} else {
-    // Handle invalid role
-    console.error('Invalid user role:', userRole);
-}
+        // Update DOM elements with user data based on userRole
+        if (userRole === 'admin') {
+            // Display admin profile details
+            // Update DOM elements with user data
+            document.getElementById('firstName').textContent = user.firstName;
+            document.getElementById('role').textContent = user.role;
+            document.getElementById('birthday').textContent = formatDate(user.birthday);
+            document.getElementById('age').textContent = calculateAge(user.birthday);
+            document.getElementById('maritalStatus').textContent = user.maritalStatus;
+            document.getElementById('gender').textContent = user.gender;
+            document.getElementById('email').textContent = user.email;
+            document.getElementById('phoneNumber').textContent = user.phoneNumber;
+            document.getElementById('emergencyPhoneNumber').textContent = user.emergencyPhoneNumber;
+            document.getElementById('joiningDate').textContent = formatJoiningDate(user.joiningDate);
+            document.getElementById('profilePic').src = "https://img.freepik.com/premium-vector/businessman-avatar-cartoon-character-profile_18591-50139.jpg";
+            // Add other admin-specific fields here
+        } else if (userRole === 'employee') {
+            // Display employee profile details
+            // Update DOM elements with user data
+            document.getElementById('firstName').textContent = user.firstName;
+            document.getElementById('role').textContent = user.role;
+            document.getElementById('birthday').textContent = formatDate(user.birthday);
+            document.getElementById('age').textContent = calculateAge(user.birthday);
+            document.getElementById('maritalStatus').textContent = user.maritalStatus;
+            document.getElementById('gender').textContent = user.gender;
+            document.getElementById('email').textContent = user.email;
+            document.getElementById('phoneNumber').textContent = user.phoneNumber;
+            document.getElementById('emergencyPhoneNumber').textContent = user.emergencyPhoneNumber;
+            document.getElementById('joiningDate').textContent = formatJoiningDate(user.joiningDate);
+            document.getElementById('profilePic').src = user.photoUrl;
+            // Add other employee-specific fields here
+        } else {
+            // Handle invalid role
+            console.error('Invalid user role:', userRole);
+        }
 
     } catch (error) {
         console.error('Error fetching profile:', error);
         // Handle error, e.g., display error message to the user
     }
 });
+
 
 
 // Function to calculate age based on date of birth

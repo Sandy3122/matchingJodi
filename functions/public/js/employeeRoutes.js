@@ -4,7 +4,8 @@ const employeeRoutes = [
   "/employee-search",
   "/getall-employee",
   "/profile",
-  "/employees"
+  "/employees",
+  "/access",
   
 ];
 

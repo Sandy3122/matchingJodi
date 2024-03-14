@@ -58,7 +58,7 @@ async function getEmployeeProfile(req, res, employeeId) {
         }
         
         const employeeData = employeeDoc.data();
-        return res.status(200).json({ employeeData: employeeData });
+        return res.status(200).json({ user: employeeData });
     } catch (error) {
         console.error('Error fetching employee profile:', error);
         return res.status(500).json({ error: 'Internal server error' });
@@ -76,7 +76,7 @@ async function getAdminProfile(req, res, adminId) {
         }
         
         const adminData = adminDoc.data();
-        return res.status(200).json({ adminData: adminData });
+        return res.status(200).json({ user: adminData });
     } catch (error) {
         console.error('Error fetching admin profile:', error);
         return res.status(500).json({ error: 'Internal server error' });

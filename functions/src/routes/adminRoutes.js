@@ -4,6 +4,8 @@ const router = express.Router();
 const { handleAdminRegistration } = require('../controllers/adminRegistrationController');
 const { handleAdminLogin, handleAdminLogout } = require('../controllers/adminLoginController');
 const accessRightsController  = require('../controllers/accessRightsController');
+const { resetEmployeePassword } = require("../controllers/employeeResetPasswordController")
+
 
 // Admin registration route
 router.post('/admin-registration', handleAdminRegistration);
@@ -28,5 +30,9 @@ router.patch('/access-rights/:accessRightId/routes', accessRightsController.upda
 
 // Delete access right routes
 router.delete('/access-rights/:accessRightId', accessRightsController.deleteAccessRight);
+
+// resetting the employee password
+router.patch("/reset-password", resetEmployeePassword);
+
 
 module.exports = router;

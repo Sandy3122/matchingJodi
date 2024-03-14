@@ -34,9 +34,14 @@ router.get('/dashboard', (req, res) => {
   res.sendFile(path.join(__dirname, '..', '..', 'public', 'main.html'));
 });
 
-// Define route to serve employee profile page
+// Define route to serve access rights page
 router.get('/access-rights', (req, res) => {
   res.sendFile(path.join(__dirname, '..', '..', 'public', 'employees', 'accessRights.html'));
+});
+
+// Define route to reset employee passwords
+router.get('/reset-password', (req, res) => {
+  res.sendFile(path.join(__dirname, '..', '..', 'public', 'admin', 'resetEmployeePasswords.html'));
 });
 
 // Access denied route

@@ -1,3 +1,9 @@
+    let sessionRole = "manager"
+    let urlString = "/employee/employee-search"
+    
+      
+    
+    
     // Function to format date and time
     function formatDateTime(dateTime) {
       const date = new Date(dateTime._seconds * 1000);
