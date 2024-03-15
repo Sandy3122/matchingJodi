@@ -8,6 +8,11 @@ module.exports = {
         const { employeeId, newPassword } = req.body;
 
         try {
+            // Check if employeeId and newPassword are provided
+            if (!employeeId || !newPassword) {
+                return res.status(400).json({ error: "Employee ID and new password are required." });
+            }
+
             // Hash the new password
             const hashedPassword = await bcrypt.hash(newPassword, 10);
 

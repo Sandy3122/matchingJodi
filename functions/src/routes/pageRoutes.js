@@ -35,6 +35,12 @@ router.use(async (req, res, next) => {
   }
 });
 
+// Function to get all access rights from the database
+async function getAllAccessRights() {
+    const snapshot = await db.collection('accessRights').get();
+    return snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+}
+
 
 // Serve employee profile page
 router.get('/profile', (req, res) => {
@@ -51,10 +57,19 @@ router.get('/getall-employees', (req, res) => {
     res.sendFile(path.join(__dirname, '..', '..', 'public', 'employees', 'getAllEmployees.html'));
 });
 
-// Function to get all access rights from the database
-async function getAllAccessRights() {
-    const snapshot = await db.collection('accessRights').get();
-    return snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-}
+// route to serve access rights page
+router.get('/access-rights', (req, res) => {
+    res.sendFile(path.join(__dirname, '..', '..', 'public', 'employees', 'accessRights.html'));
+});
+  
+// route to reset employee passwords
+router.get('/reset-password', (req, res) => {
+    res.sendFile(path.join(__dirname, '..', '..', 'public', 'admin', 'resetEmployeePasswords.html'));
+});
+
+
+
+
+
 
 module.exports = router;

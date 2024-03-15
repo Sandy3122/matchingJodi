@@ -52,17 +52,26 @@
         </div>
         <div class="modal-body">
           <form id="addRoleRightsForm">
-              <div class="mb-3">
-                  <label for="role" class="form-label">Role</label>
-                  <input type="text" class="form-control" id="role" required>
-              </div>
-              <div class="mb-3">
-                  <label for="status" class="form-label">Status</label>
-                  <select class="form-select" id="status" required>
-                      <option value="active">Active</option>
-                      <option value="inactive">Inactive</option>
-                  </select>
-              </div>
+            <div class="mb-3">
+                <label for="role" class="form-label">Select Role</label>
+                <select class="form-select" id="role" required>
+                    <option value="" hidden>Select Role</option>
+                    <option value="user">User</option>
+                    <option value="employee">Employee</option>
+                    <option value="manager">Manager</option>
+                    <option value="superAdmin">Super Admin</option>
+                    <option value="thirdPartyAgent">Third Party Agent</option>
+                </select>
+            </div>
+            <div class="mb-3">
+                <label for="status" class="form-label">Status</label>
+                <select class="form-select" id="status" required>
+                    <option value="" hidden>Select Status</option>
+                    <option value="active">Active</option>
+                    <option value="inactive">Inactive</option>
+                </select>
+            </div>
+            
               <button type="submit" class="btn btn-primary">Submit</button>
           </form>
         </div>
