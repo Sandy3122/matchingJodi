@@ -33,13 +33,22 @@
         </div>
 
         <div class="submenu">
-            <div class="submenu-item"><a href="/api/dashboard/profile">Employee Profile</a></div>
-            <div class="submenu-item"><a href="/api/dashboard/employee-search">Employee Search</a></div>
-            <div class="submenu-item"><a href="/api/dashboard/getall-employees">Get all employees</a></div>
-            <div class="submenu-item"><a href="/admin/access-rights">Access Rights</a></div>
-            <div class="submenu-item"><a href="/employee/dashboard/add-employee">Add Employee</a></div>
+            <div class="submenu-item"><a href="/dashboard/profile">Employee Profile</a></div>
+            <div class="submenu-item"><a href="/dashboard/employee-search">Employee Search</a></div>
+            <div class="submenu-item"><a href="/dashboard/getall-employees">Get all employees</a></div>
         </div>
 
+        <!-- Admin menu items -->
+        <div class="menu-item" id="admin-menu" style="display: none;">
+            <div class="menu-icon">▶</div> Admin
+        </div>
+
+        <div class="submenu" id="admin-submenu" style="display: none;">
+            <div class="submenu-item"><a href="/dashboard/profile">Employee Profile</a></div>
+            <div class="submenu-item"><a href="/dashboard/employee-search">Employee Search</a></div>
+            <div class="submenu-item"><a href="/dashboard/getall-employees">Get all employees</a></div>
+            <div class="submenu-item"><a href="/admin/access-rights">Access Rights</a></div>
+        </div>
 
         <!-- Menu Item 4 Logout -->
         <div class="menu-item">
@@ -62,6 +71,20 @@
             });
         });
 
+        // Function to show admin menu based on role
+        function showAdminMenu() {
+            const adminMenu = document.getElementById('admin-menu');
+            const adminSubmenu = document.getElementById('admin-submenu');
+            const role = sessionStorage.getItem('role');
+            if (role === 'admin') {
+                adminMenu.style.display = 'block';
+                adminSubmenu.style.display = 'block';
+            } else {
+                adminMenu.style.display = 'none';
+                adminSubmenu.style.display = 'none';
+            }
+        }
+
         // Update iframe src based on clicked link
         function loadContentFromLink(link) {
             const iframe = document.getElementById('content-frame');
@@ -82,7 +105,8 @@
         // Set iframe src to employee-profile on initial page load
         window.addEventListener('DOMContentLoaded', function() {
             const iframe = document.getElementById('content-frame');
-            iframe.src = '/api/dashboard/profile';
+            iframe.src = '/dashboard/profile';
+            showAdminMenu(); // Show admin menu based on role
         });
 
         // Remove '#' from URL when the page is reloaded

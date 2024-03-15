@@ -1,9 +1,3 @@
-
-
-
-
-
-
 // getAllEmployees.js
 
 // Define updateStatus function

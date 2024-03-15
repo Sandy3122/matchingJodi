@@ -50,6 +50,7 @@ const userRoutes = require("./src/routes/userRoutes");
 const employeePageRoutes = require("./src/routes/employeePageRoutes");
 const supportRequestFormRoutes = require("./src/routes/supportRequestRoutes");
 const employeeRoutes = require('./src/routes/employeeRoutes');
+const pageRoutes = require('./src/routes/pageRoutes');
 const routes = require('./src/routes/routes');
 const adminRoutes = require('./src/routes/adminRoutes');
 const adminPageRoutes = require('./src/routes/adminPageRoutes');
@@ -61,6 +62,7 @@ app.use("/support", supportRequestFormRoutes);
 app.use('/api', employeeRoutes);
 app.use('/api', adminRoutes);
 app.use('/api', routes);
+app.use('/dashboard', pageRoutes);
 
 app.get('/testing', (req, res) => {
   // Handle the request for /testing here

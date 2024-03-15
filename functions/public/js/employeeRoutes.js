@@ -2,11 +2,10 @@
 
 const employeeRoutes = [
   "/employee-search",
-  "/getall-employee",
+  "/getall-employees",
   "/profile",
-  "/employees",
-  "/access",
-  
+  "/addEmployee",
+  "/access-rights"
 ];
 
 // module.exports = employeeRoutes;

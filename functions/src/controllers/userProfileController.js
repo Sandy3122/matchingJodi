@@ -22,7 +22,7 @@ async function getUserProfile(req, res) {
 
         if (userRole === 'admin') {
             return getAdminProfile(req, res, userId);
-        } else if (userRole === 'employee') {
+        } else if (userRole) {
             return getEmployeeProfile(req, res, userId);
         } else {
             return res.status(400).json({ error: 'Invalid user role.' });
