@@ -2,14 +2,10 @@
 document.addEventListener('DOMContentLoaded', async function () {
     try {
         let token, userRole;
-        if (sessionStorage.getItem("adminToken")) {
-            token = sessionStorage.getItem('adminToken');
-            userRole = 'admin'; // Set userRole for admin
-            console.log("Admin Token: ", token);
-        } else if (sessionStorage.getItem("employeeToken")) {
-            token = sessionStorage.getItem('employeeToken');
-            userRole = 'employee'; // Set userRole for employee
-            console.log("Employee Token: ", token);
+        if (sessionStorage.getItem("token")) {
+            token = sessionStorage.getItem('token');
+            userRole = sessionStorage.getItem('role'); // Set userRole for admin
+            console.log(token, userRole)
         }
 
         // Check if token or userRole is not available
@@ -32,7 +28,8 @@ document.addEventListener('DOMContentLoaded', async function () {
         const user = data.user;
 
         // Update DOM elements with user data based on userRole
-        if (userRole === 'admin') {
+        if (userRole) {
+            console.log(userRole)
             // Display admin profile details
             // Update DOM elements with user data
             document.getElementById('firstName').textContent = user.firstName;
@@ -45,23 +42,8 @@ document.addEventListener('DOMContentLoaded', async function () {
             document.getElementById('phoneNumber').textContent = user.phoneNumber;
             document.getElementById('emergencyPhoneNumber').textContent = user.emergencyPhoneNumber;
             document.getElementById('joiningDate').textContent = formatJoiningDate(user.joiningDate);
-            document.getElementById('profilePic').src = "https://img.freepik.com/premium-vector/businessman-avatar-cartoon-character-profile_18591-50139.jpg";
+            document.getElementById('profilePic').src = user.photoUrl ? user.photoUrl : "https://img.freepik.com/premium-vector/businessman-avatar-cartoon-character-profile_18591-50139.jpg";
             // Add other admin-specific fields here
-        } else if (userRole === 'employee') {
-            // Display employee profile details
-            // Update DOM elements with user data
-            document.getElementById('firstName').textContent = user.firstName;
-            document.getElementById('role').textContent = user.role;
-            document.getElementById('birthday').textContent = formatDate(user.birthday);
-            document.getElementById('age').textContent = calculateAge(user.birthday);
-            document.getElementById('maritalStatus').textContent = user.maritalStatus;
-            document.getElementById('gender').textContent = user.gender;
-            document.getElementById('email').textContent = user.email;
-            document.getElementById('phoneNumber').textContent = user.phoneNumber;
-            document.getElementById('emergencyPhoneNumber').textContent = user.emergencyPhoneNumber;
-            document.getElementById('joiningDate').textContent = formatJoiningDate(user.joiningDate);
-            document.getElementById('profilePic').src = user.photoUrl;
-            // Add other employee-specific fields here
         } else {
             // Handle invalid role
             console.error('Invalid user role:', userRole);
@@ -72,8 +54,6 @@ document.addEventListener('DOMContentLoaded', async function () {
         // Handle error, e.g., display error message to the user
     }
 });
-
-
 
 // Function to calculate age based on date of birth
 function calculateAge(dateOfBirth) {

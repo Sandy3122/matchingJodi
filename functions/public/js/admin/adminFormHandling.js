@@ -30,8 +30,8 @@ document.getElementById("adminLoginForm").addEventListener("submit", async funct
                 window.location.href = "/admin/dashboard";
             });
             // Store token in sessionStorage
-            sessionStorage.setItem('adminToken', data.token);
-            sessionStorage.setItem('adminRole', data.role);
+            sessionStorage.setItem('token', data.token);
+            sessionStorage.setItem('role', data.role);
         } else {
             // Error
             Swal.fire({

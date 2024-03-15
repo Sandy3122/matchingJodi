@@ -4,7 +4,7 @@ const path = require("path");
 
 // Middleware to check if user is admin
 const isAdmin = (req, res, next) => {
-  if (req.session.adminRole === "admin") {
+  if (req.session.role === "admin") {
     // User is admin, proceed to the next middleware
     next();
   } else {
@@ -16,7 +16,7 @@ const isAdmin = (req, res, next) => {
 // Admin Login route
 router.get("/admin-login", (req, res, next) => {
   // Check if user is authenticated
-  if (req.session.adminToken) {
+  if (req.session.token) {
     // If authenticated, redirect or any authenticated route
     return res.redirect("/admin/dashboard");
   }
@@ -27,7 +27,7 @@ router.get("/admin-login", (req, res, next) => {
 // Define route to serve employee profile page
 router.get('/dashboard', (req, res) => {
     // Check if user is authenticated
-    if (!req.session.adminToken) {
+    if (!req.session.token) {
       // If authenticated, redirect or any authenticated route
       return res.redirect("/admin/admin-login");
     }

@@ -2,7 +2,7 @@
 const express = require('express');
 const router = express.Router();
 const { handleAdminRegistration } = require('../controllers/adminRegistrationController');
-const { handleAdminLogin, handleAdminLogout } = require('../controllers/adminLoginController');
+const { handleAdminLogin } = require('../controllers/adminLoginController');
 const accessRightsController  = require('../controllers/accessRightsController');
 const { resetEmployeePassword } = require("../controllers/employeeResetPasswordController")
 
@@ -12,9 +12,6 @@ router.post('/admin-registration', handleAdminRegistration);
 
 // Admin login route
 router.post('/admin-login', handleAdminLogin);
-
-// Admin logout route
-router.get('/admin-logout', handleAdminLogout);
 
 // add access rights
 router.post('/access-rights', accessRightsController.addRoleRights);

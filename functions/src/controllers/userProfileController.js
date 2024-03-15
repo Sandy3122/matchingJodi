@@ -13,21 +13,9 @@ async function getUserProfile(req, res) {
         const userId = req.user.id; // Extract user ID from authenticated user
         let userRole;
 
-        // Check if both employeeRole and adminRole exist in the session
-        if (req.session.employeeRole && req.session.adminRole) {
-            // If both roles exist, check if the current user ID matches either admin or employee ID
-            if (req.session.employeeRole === userId) {
-                userRole = 'employee';
-            } else if (req.session.adminRole === userId) {
-                userRole = 'admin';
-            } else {
-                // If the user ID doesn't match either, it's an error
-                return res.status(400).json({ error: 'User role not found in session.' });
-            }
-        } else if (req.session.employeeRole) {
-            userRole = 'employee';
-        } else if (req.session.adminRole) {
-            userRole = 'admin';
+        // Check if user role exists in the session
+        if (req.session.role) {
+            userRole = req.session.role;
         } else {
             return res.status(400).json({ error: 'User role not found in session.' });
         }
@@ -44,6 +32,7 @@ async function getUserProfile(req, res) {
         return res.status(500).json({ error: 'Internal server error' });
     }
 }
+
 
 
 
@@ -83,6 +72,33 @@ async function getAdminProfile(req, res, adminId) {
     }
 }
 
+
+// Employee Logout route
+async function userLogout(req, res) {
+    // Check if role exists in the session
+    if (req.session.role) {
+        const role = req.session.role;
+        // Clear the token and role from the session
+        delete req.session.token;
+        delete req.session.role;
+
+        // Redirect based on role
+        if (role === "admin") {
+            res.redirect('/admin/admin-login');
+        } else if (role) {
+            res.redirect('/employee/employee-login');
+        } else {
+            // Handle other roles if needed
+            res.redirect('/');
+        }
+    } else {
+        // If role is not found, stay on the same page
+        res.redirect('back'); // Redirect back to the previous page
+    }
+}
+
+
 module.exports = {
     getUserProfile,
+    userLogout
 };

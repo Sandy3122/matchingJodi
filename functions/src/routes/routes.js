@@ -2,7 +2,7 @@
 const express = require('express');
 const router = express.Router();
 const path = require("path");
-const { getUserProfile } = require('../controllers/userProfileController'); // Import the getEmployeeProfile controller
+const { getUserProfile, userLogout } = require('../controllers/userProfileController'); // Import the getEmployeeProfile controller
 const { authenticateToken } = require('../utilities/verifyToken'); // Import the authenticateToken middleware
 
 
@@ -32,6 +32,8 @@ router.get("/dashboard/employee-search", (req, res) => {
 router.get('/dashboard/getall-employees', (req, res) => {
     res.sendFile(path.join(__dirname, '..', '..', 'public', 'employees', 'getAllEmployees.html'));
   });
+
+router.get('/logout', userLogout);
 
 
 module.exports = router;

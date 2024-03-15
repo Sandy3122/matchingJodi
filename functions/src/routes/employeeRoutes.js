@@ -6,7 +6,7 @@ const { handleEmployeeRegistration } = require('../controllers/employeeRegistrat
 const { searchEmployees } = require('../controllers/employeeSearchController');
 const { getAllEmployees } = require('../controllers/getAllEmployees');
 const { updateEmployeeStatus, updateRole } = require('../controllers/employeeStatusController');
-const { handleEmployeeLogin, handleEmployeeLogout } = require('../controllers/employeeLoginController');
+const { handleEmployeeLogin } = require('../controllers/employeeLoginController');
 
 // Employee registration route
 router.post('/employee-registration', handleEmployeeRegistration);
@@ -25,8 +25,5 @@ router.patch('/updateRole/:employeeId', updateRole);
 
 // Login route
 router.post('/employee-login', handleEmployeeLogin);
-
-// Logout route
-router.get('/employee-logout', handleEmployeeLogout);
 
 module.exports = router;

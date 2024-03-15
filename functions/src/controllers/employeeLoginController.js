@@ -28,33 +28,22 @@ module.exports = {
       }
 
       // Generate JWT token
-      const employeeToken = jwt.sign({ id: employee.employeeId, employeeRole: employee.role }, secretKey, { expiresIn: '30m' });
+      const token = jwt.sign({ id: employee.employeeId, role: employee.role }, secretKey, { expiresIn: '30m' });
   
       // Store token and role in session
-      req.session.employeeToken = employeeToken;
-      req.session.employeeRole = employee.role;
+      req.session.token = token;
+      req.session.role = employee.role;
   
       // Return the token or any other relevant data
       return res.status(200).json({
         message: "Employee Login Successful",
-        token: employeeToken,
+        token: token,
         employeeId: employee.employeeId, // Include the employeeId in the response
-        role: req.session.employeeRole // Include the role in the response
+        role: req.session.role // Include the role in the response
       });
     } catch (error) {
       console.error('Error logging in:', error);
       return res.status(500).json({ message: 'Internal server error' });
     }
-  },
-  
-
-  // Employee Logout route
-  handleEmployeeLogout: function(req, res) {
-    // Clear the token and role from the session
-    delete req.session.employeeToken;
-    delete req.session.employeeRole;
-
-    // Redirect to login page after logout
-    res.redirect('/employee/employee-login');
   }
 };

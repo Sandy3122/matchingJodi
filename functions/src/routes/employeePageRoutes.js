@@ -13,7 +13,7 @@ router.get("/employee-registration", (req, res) => {
 // Employee Login route
 router.get("/employee-login", (req, res) => {
   // Check if user is authenticated
-  if (req.session.employeeToken) {
+  if (req.session.token) {
     // If authenticated, redirect to employee Search route
     return res.redirect("/employee/dashboard");
   }
@@ -24,7 +24,7 @@ router.get("/employee-login", (req, res) => {
 // Define route to serve employee profile page
 router.get('/dashboard', (req, res) => {
     // Check if user is authenticated
-    if (!req.session.employeeToken) {
+    if (!req.session.token) {
       // If not authenticated, redirect to login page
       return res.redirect("/employee/employee-login");
     }

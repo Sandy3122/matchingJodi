@@ -3,16 +3,20 @@ const secretKey = process.env.SECRET_KEY;
 
 function authenticateToken(req, res, next) {
     let token;
-    if (req.session.employeeToken) {
-        token = req.session.employeeToken;
-        req.session.employeeRole = 'employee'; // Set role in session for employee login
-    } else if (req.session.adminToken) {
-        token = req.session.adminToken;
-        req.session.adminRole = 'admin'; // Set role in session for admin login
+
+    // Check if token exists in session
+    if (req.session && req.session.token) {
+        token = req.session.token;
+
+        // Set role in session for employee login if it exists in the session
+        if (req.session.role) {
+            req.userRole = req.session.role;
+        }
     } else {
         return res.status(401).json({ message: 'Authentication required.' });
     }
 
+    // Verify JWT token
     jwt.verify(token, secretKey, (err, decoded) => {
         if (err) {
             console.error('Error verifying JWT token:', err);
