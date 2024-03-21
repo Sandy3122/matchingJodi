@@ -7,7 +7,7 @@ const sharp = require("sharp");
 const bcrypt = require('bcryptjs');
 const { PDFDocument } = require('pdf-lib');
 const jwt = require('jsonwebtoken');
-const { checkExistingUserByEmail, checkExistingUserByMobileNumber } = require("../utilities/userExistenceCheck");
+const { checkExistingByEmail, checkExistingByPhoneNumber } = require("../utilities/userExistenceCheck");
 const allEmployeeRoutes = require("../routes/employeeRoutes"); // Import employee routes
 
 // Define secret key for JWT
@@ -136,13 +136,13 @@ module.exports = {
 
       try {
         // Check if the user already exists with the provided email
-        const emailExists = await checkExistingUserByEmail(email);
+        const emailExists = await checkExistingByEmail(email, 'employee');
         if (emailExists) {
           return res.status(401).json({ message: "User already exists with this email." });
         }
         
         // Check if the user already exists with the provided mobile number
-        const mobileNumberExists = await checkExistingUserByMobileNumber(phoneNumber);
+        const mobileNumberExists = await checkExistingByPhoneNumber(phoneNumber, 'employee');
         if (mobileNumberExists) {
           return res.status(401).json({ message: "User already exists with this mobile number." });
         }

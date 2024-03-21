@@ -33,13 +33,15 @@ module.exports = {
       // Store token and role in session
       req.session.token = token;
       req.session.role = employee.role;
+      req.session.data = {id:employee.id, name:employee.firstName + " " + employee.lastName, phoneNumber:employee.phoneNumber};
   
       // Return the token or any other relevant data
       return res.status(200).json({
         message: "Employee Login Successful",
         token: token,
         employeeId: employee.employeeId, // Include the employeeId in the response
-        role: req.session.role // Include the role in the response
+        role: req.session.role, // Include the role in the response
+        data: req.session.data
       });
     } catch (error) {
       console.error('Error logging in:', error);

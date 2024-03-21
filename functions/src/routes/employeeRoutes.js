@@ -3,10 +3,12 @@
 const express = require('express');
 const router = express.Router();
 const { handleEmployeeRegistration } = require('../controllers/employeeRegistrationController');
+const { handleUserRegistration } = require('../controllers/userRegistrationController');
 const { searchEmployees } = require('../controllers/employeeSearchController');
 const { getAllEmployees } = require('../controllers/getAllEmployees');
 const { updateEmployeeStatus, updateRole } = require('../controllers/employeeStatusController');
 const { handleEmployeeLogin } = require('../controllers/employeeLoginController');
+const { authenticateToken } = require('../utilities/verifyToken'); // Import the authenticateToken middleware
 
 // Employee registration route
 router.post('/employee-registration', handleEmployeeRegistration);
@@ -25,5 +27,8 @@ router.patch('/updateRole/:employeeId', updateRole);
 
 // Login route
 router.post('/employee-login', handleEmployeeLogin);
+
+router.post('/user-registration',authenticateToken, handleUserRegistration);
+
 
 module.exports = router;

@@ -1,6 +1,6 @@
 // admin registration controller
 const { saveAdminData } = require('../models/adminRegistrationModel');
-const { checkExistingAdminByEmail, checkExistingAdminByPhoneNumber } = require('../utilities/adminExistenceCheck');
+const { checkExistingByEmail, checkExistingByPhoneNumber } = require('../utilities/userExistenceCheck');
 const { generateNumericId } = require("../utilities/generateIds");
 const bcrypt = require('bcryptjs');
 
@@ -25,13 +25,13 @@ module.exports = {
       }
 
       // Check if the user already exists with the provided email
-      const emailExists = await checkExistingAdminByEmail(email);
+      const emailExists = await checkExistingByEmail(email, 'admin');
       if (emailExists) {
         return res.status(401).json({ message: "Admin already exists with this email." });
       }
       
       // Check if the user already exists with the provided mobile number
-      const mobileNumberExists = await checkExistingAdminByPhoneNumber(phoneNumber);
+      const mobileNumberExists = await checkExistingByPhoneNumber(phoneNumber, 'admin');
       if (mobileNumberExists) {
         return res.status(401).json({ message: "Admin already exists with this mobile number." });
       }

@@ -1,28 +1,58 @@
 const admin = require("firebase-admin");
 
-// Function to check if a user exists with the provided email
-async function checkExistingUserByEmail(email) {
-  const existingEmailUser = await admin
+// Function to check if a record exists with the provided email in the specified collection
+async function checkExistingByEmail(email, collectionName) {
+  const existingRecord = await admin
     .firestore()
-    .collection("employeeRegistrationData") // Corrected collection name
-    .where("email", "==", email) // Assuming email field is named "email"
+    .collection(collectionName)
+    .where("email", "==", email)
     .get();
-
-  return !existingEmailUser.empty;
+  return !existingRecord.empty;
 }
 
-// Function to check if a user exists with the provided mobile number
-async function checkExistingUserByMobileNumber(phoneNumber) {
-  const existingMobileUser = await admin
+// Function to check if a record exists with the provided phone number in the specified collection
+async function checkExistingByPhoneNumber(phoneNumber, collectionName) {
+  const existingRecord = await admin
     .firestore()
-    .collection("employeeRegistrationData") // Corrected collection name
-    .where("phoneNumber", "==", phoneNumber) // Assuming mobile number field is named "phoneNumber"
+    .collection(collectionName)
+    .where("phoneNumber", "==", phoneNumber)
     .get();
-
-  return !existingMobileUser.empty;
+  return !existingRecord.empty;
 }
 
 module.exports = {
-  checkExistingUserByEmail,
-  checkExistingUserByMobileNumber
-}
+  checkExistingByEmail: async function(email, userType) {
+    let collectionName;
+    switch (userType) {
+      case "employee":
+        collectionName = "employeeRegistrationData";
+        break;
+      case "admin":
+        collectionName = "admins";
+        break;
+      case "user":
+        collectionName = "userRegistrationData";
+        break;
+      default:
+        collectionName = userType;
+    }
+    return checkExistingByEmail(email, collectionName);
+  },
+  checkExistingByPhoneNumber: async function(phoneNumber, userType) {
+    let collectionName;
+    switch (userType) {
+      case "employee":
+        collectionName = "employeeRegistrationData";
+        break;
+      case "admin":
+        collectionName = "admins";
+        break;
+      case "user":
+        collectionName = "userRegistrationData";
+        break;
+      default:
+        collectionName = userType;
+    }
+    return checkExistingByPhoneNumber(phoneNumber, collectionName);
+  }
+};
