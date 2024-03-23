@@ -15,7 +15,15 @@ const db = admin.firestore();
 module.exports = {
   saveUserRegistrationData: async function (userId, userData) {
     try {
-      await db.collection('appusers').doc(userId).set(userData);
+      // Replace undefined values with empty strings
+      const sanitizedUserData = {};
+      Object.keys(userData).forEach(key => {
+        sanitizedUserData[key] = userData[key] !== undefined ? userData[key] : '';
+      });
+
+      // Save user registration data to Firestore
+      await db.collection('appusers').doc(userId).set(sanitizedUserData);
+
       return true;
     } catch (error) {
       console.error('Error saving user registration data:', error);

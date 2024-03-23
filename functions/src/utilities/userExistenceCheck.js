@@ -34,7 +34,7 @@ module.exports = {
         collectionName = "userRegistrationData";
         break;
       default:
-        collectionName = userType;
+        throw new Error("Invalid userType specified");
     }
     return checkExistingByEmail(email, collectionName);
   },
@@ -51,7 +51,7 @@ module.exports = {
         collectionName = "userRegistrationData";
         break;
       default:
-        collectionName = userType;
+        throw new Error("Invalid userType specified");
     }
     return checkExistingByPhoneNumber(phoneNumber, collectionName);
   }

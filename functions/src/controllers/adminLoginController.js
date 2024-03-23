@@ -28,13 +28,16 @@ module.exports = {
       // Store token in session or response body as needed
       req.session.token = token;
       req.session.role = admin.role;
+      req.session.data = {id:admin.id, name:admin.firstName + " " + admin.lastName, phoneNumber:admin.phoneNumber};
+
   
       // Return the token or any other relevant data
       return res.status(200).json({
         message: "Admin Login Successful",
         token: token,
         adminId: admin.adminId, // Include the adminId in the response
-        role: req.session.role // Include the role in the response
+        role: req.session.role, // Include the role in the response
+        data: req.session.data
       });
     } catch (error) {
       console.error('Error logging in:', error);

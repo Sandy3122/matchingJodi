@@ -50,7 +50,7 @@
 
                                         <div data-mdb-input-init class="form-outline">
                                             <input type="text" id="firstName" class="form-control form-control-lg"
-                                                oninput="checkInput(this)" name="firstName" required />
+                                              name="firstName" required />
                                             <label class="form-label" for="firstName">First Name</label>
                                         </div>
 
@@ -59,7 +59,7 @@
 
                                         <div data-mdb-input-init class="form-outline">
                                             <input type="text" id="lastName" class="form-control form-control-lg"
-                                                oninput="checkInput(this)" name="lastName" required />
+                                              name="lastName" required />
                                             <label class="form-label" for="lastName">Last Name</label>
                                         </div>
 
@@ -125,7 +125,7 @@
 
                                         <div data-mdb-input-init class="form-outline">
                                             <input type="email" id="email" name="email"
-                                                class="form-control form-control-lg" oninput="checkInput(this)"
+                                                class="form-control form-control-lg" 
                                                 required />
                                             <label class="form-label" for="email">Email</label>
                                         </div>
@@ -139,7 +139,7 @@
                                         <div data-mdb-input-init class="form-outline">
                                             <input type="tel" id="phoneNumber" name="phoneNumber"
                                                 class="form-control form-control-lg"
-                                                oninput="this.value = this.value.replace(/[^0-9]/g, ''); checkInput(this);"
+                                                oninput="this.value = this.value.replace(/[^0-9]/g, '');"
                                                 maxlength="10" pattern="[0-9]{10}" required autocomplete="off" />
                                             <label class="form-label" for="phoneNumber">Phone Number</label>
                                         </div>
@@ -150,7 +150,7 @@
                                         <div data-mdb-input-init class="form-outline">
                                             <input type="tel" id="emergencyPhoneNumber"
                                                 class="form-control form-control-lg" name="emergencyPhoneNumber"
-                                                oninput="this.value = this.value.replace(/[^0-9]/g, ''); checkInput(this);"
+                                                oninput="this.value = this.value.replace(/[^0-9]/g, '');"
                                                 maxlength="10" pattern="[0-9]{10}" required autocomplete="off" />
                                             <label class="form-label" for="emergencyPhoneNumber">Emergency Phone
                                                 Number</label>
@@ -163,7 +163,7 @@
                                     <div class="col-md-6 col-sm-6 mb-3 pb-2">
                                         <div data-mdb-input-init class="form-outline">
                                             <input type="password" id="pin" class="form-control form-control-lg"
-                                                name="pin" oninput="checkInput(this)" required maxlength="4"
+                                                name="pin"  required maxlength="4"
                                                 pattern="[0-9]{4}" />
                                             <label class="form-label" for="pin">4 Digit Pin</label>
                                         </div>
@@ -172,7 +172,7 @@
                                     <div class="col-md-6 col-sm-6 mb-3 pb-2">
                                         <div data-mdb-input-init class="form-outline">
                                             <input type="password" id="confirmPin" class="form-control form-control-lg"
-                                                name="confirmPin" oninput="checkInput(this)" required maxlength="4"
+                                                name="confirmPin"  required maxlength="4"
                                                 pattern="[0-9]{4}" />
                                             <label class="form-label" for="confirmPin">Confirm 4 Digit Pin</label>
                                         </div>
@@ -218,8 +218,6 @@
                                 <div class="row text-center d-flex mt-2">
                                     <span>Already have an account? <a href="/employee/employee-login" style="color: #ff2f68;" class="text-decoration-none text-truncate">Log in</a> </span>
                                 </div>
-                                
-
                             </form>
                         </div>
                     </div>

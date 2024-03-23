@@ -201,7 +201,7 @@ module.exports = {
         return res.status(200).json({ message: "Data sent successfully.", token });
       } catch (error) {
         console.error("Error uploading files or saving data:", error);
-        return res.status(500).json({ error: "Error uploading files or saving data" });
+        return res.status(500).json({ message: "Error uploading files or saving data" });
       }
     });
   },

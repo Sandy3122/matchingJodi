@@ -25,7 +25,7 @@ router.get("/admin-login", (req, res, next) => {
 });
 
 // Define route to serve employee profile page
-router.get('/dashboard', (req, res) => {
+router.get('/dashboard', isAdmin, (req, res) => {
     // Check if user is authenticated
     if (!req.session.token) {
       // If authenticated, redirect or any authenticated route
@@ -35,7 +35,7 @@ router.get('/dashboard', (req, res) => {
 });
 
 // Define route to serve access rights page
-router.get('/access-rights', (req, res) => {
+router.get('/access-rights', isAdmin, (req, res) => {
   res.sendFile(path.join(__dirname, '..', '..', 'public', 'employees', 'accessRights.html'));
 });
 
@@ -48,5 +48,11 @@ router.get('/reset-password', (req, res) => {
 router.get("/access-denied", (req, res) => {
   res.status(403).send("Access denied");
 });
+
+// route to Add users
+router.get('/user-registration', (req, res) => {
+  res.sendFile(path.join(__dirname, '..', '..', 'public', 'customer', 'userRegistration.html'));
+});
+
 
 module.exports = router;

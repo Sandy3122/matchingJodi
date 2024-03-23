@@ -68,6 +68,12 @@ router.get('/reset-password', (req, res) => {
 });
 
 
+// route to Add users
+router.get('/user-registration', (req, res) => {
+    res.sendFile(path.join(__dirname, '..', '..', 'public', 'customer', 'userRegistration.html'));
+});
+
+
 
 
 

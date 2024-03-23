@@ -1,3 +1,5 @@
+// userRegistrationController.js
+
 const { saveUserRegistrationData } = require("../models/userRegistrationModel"); // Import user registration model
 const {
   checkExistingByEmail,
@@ -5,28 +7,29 @@ const {
 } = require("../utilities/userExistenceCheck");
 const bcrypt = require("bcryptjs");
 const { generateNumericId } = require("../utilities/generateIds");
-const jwt = require('jsonwebtoken');
+const jwt = require("jsonwebtoken");
 // Define secret key for JWT
 const secretKey = process.env.SECRET_KEY;
 
 module.exports = {
   handleUserRegistration: async function (req, res) {
+    const {
+      firstName,
+      lastName,
+      gender,
+      profileFor,
+      email,
+      phoneNumber,
+      pin,
+    } = req.body;
+    console.log(req.body);
     try {
-      const {
-        firstName,
-        lastName,
-        gender,
-        profileFor,
-        email,
-        phoneNumber,
-        pin,
-      } = req.body;
 
       const userId = "app" + generateNumericId();
       const timestamp = new Date(); // Create a new Date object to represent the current timestamp
 
       // Check if a user with the provided email already exists
-      const emailExists = await checkExistingByEmail(email, 'user');
+      const emailExists = await checkExistingByEmail(email, "user");
       if (emailExists) {
         return res
           .status(401)
@@ -34,7 +37,7 @@ module.exports = {
       }
 
       // Check if a user with the provided phone number already exists
-      const phoneExists = await checkExistingByPhoneNumber(phoneNumber, 'user');
+      const phoneExists = await checkExistingByPhoneNumber(phoneNumber, "user");
       if (phoneExists) {
         return res
           .status(401)
@@ -43,36 +46,62 @@ module.exports = {
 
       // Hash the pin/password
       const hashedPin = await bcrypt.hash(pin, 10);
+      console.log("pin", hashedPin)
+
+
+
+
+
+      // Convert relevant fields to lowercase
+      const lowerCaseFirstName = firstName ? firstName.toLowerCase().trim() : '';
+      const lowerCaseLastName = lastName ? lastName.toLowerCase().trim() : '';
+      const lowerCaseGender = gender ? gender.toLowerCase().trim() : '';
+      const lowerCaseEmail = email ? email.toLowerCase().trim() : '';
+      const lowerCaseProfileFor = profileFor ? profileFor.toLowerCase().trim() : '';
+      const generatedCustomerId = generateNumericId();
+
+
+
 
       // Prepare user data object
       const userData = {
-        firstName: firstName.trim().toLowerCase(),
-        lastName: lastName.trim().toLowerCase(),
-        gender: gender.trim().toLowerCase(),
-        profileFor: profileFor.trim().toLowerCase(),
-        email: email.trim().toLowerCase(),
-        phoneNumber: phoneNumber.trim(),
+        firstName: lowerCaseFirstName,
+        lastName: lowerCaseLastName,
+        gender: lowerCaseGender,
+        profileFor: lowerCaseProfileFor,
+        email: lowerCaseEmail,
+        phoneNumber: phoneNumber,
         pin: hashedPin,
-        termCondition: req.body.termCondition || "",
-        customerId: req.body.customerId || "",
-        registeredById: req.session.data.id,
-        registeredByName: req.session.data.name,
-        registeredByNumber: req.session.data.phoneNumber,
+        termsAndConditions: req.body.termsAndConditions || "",
+        customerId: generatedCustomerId,
+        registeredById: req.session?.data?.id,
+        registeredByName: req.session?.data?.name,
+        registeredByNumber: req.session?.data?.phoneNumber,
         accountCreatedDateTime: timestamp,
         dateOfBirth: req.body.dateOfBirth || "",
-        maritialStatus: req.body.maritialStatus || "",
+        maritalStatus: req.body.maritalStatus || "",
         religion: req.body.religion || "",
         kyc: req.body.kyc || "",
-        documentFrontUrl: req.body.documentFrontUrl || "",
-        documentBackUrl: req.body.documentBackUrl || "",
-        imgListUrls: Array(5).fill({
-            imgLink: "",
-            verification_by: "",
-            verification_date: "",
-            verified: "no"
-          }), // Array of objects with the specified fields
-        currentAddress: req.body.currentAddress || "",
-        permanentAddress: req.body.permanentAddress || "",
+        documentFront: req.body.documentFrontUrl || "",
+        documentBack: req.body.documentBackUrl || "",
+        imgList: Array(5).fill({
+          imgLink: "",
+          verificationBy: "",
+          verificationDate: "",
+          verified: "no",
+        }), // Array of objects with the specified fields
+        currentAddress: {
+          city: "",
+          country: "",
+          state: "",
+          town: ""
+        },
+        permanentAddress: {
+          city: "",
+          country: "",
+          state: "",
+          town: ""
+        },
         height: req.body.height || "",
         bodyType: req.body.bodyType || "",
         dietType: req.body.dietType || "",
@@ -90,6 +119,22 @@ module.exports = {
         rashi: req.body.rashi || "",
         timeOfBirth: req.body.timeOfBirth || "",
         birthPlace: req.body.birthPlace || "",
+        noOfBrother: req.body.noOfBrother || "",
+        noOfSister: req.body.noOfSister || "",
+        brotherMarried: req.body.brotherMarried || "",
+        sisterMarried: req.body.sisterMarried || "",
+        primaryGuardian: {
+          name: req.body.name || "",
+          relation: req.body.relation || "",
+          phoneNumber: req.body.phoneNumber || "",
+          workingWith: req.body.workingWith || ""
+        },
+        secondaryGuardian: {
+          name: req.body.name || "",
+          relation: req.body.relation || "",
+          phoneNumber: req.body.phoneNumber || "",
+          workingWith: req.body.workingWith || ""
+        }
       };
 
       // Save user data to the database
@@ -106,7 +151,7 @@ module.exports = {
       console.error("Error uploading files or saving data:", error);
       return res
         .status(500)
-        .json({ error: "Error uploading files or saving data" });
+        .json({ message: "Error uploading files or saving data" });
     }
   },
 };

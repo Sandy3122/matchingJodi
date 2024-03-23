@@ -1,21 +1,21 @@
 // Handle registration form submission
-function checkInput(inputField) {
-    if (inputField.value !== '') {
-        inputField.previousElementSibling.classList.add('active');
-    } else {
-        inputField.previousElementSibling.classList.remove('active');
-    }
-}
+// function checkInput(inputField) {
+//     if (inputField.value !== '') {
+//         inputField.previousElementSibling.classList.add('active');
+//     } else {
+//         inputField.previousElementSibling.classList.remove('active');
+//     }
+// }
 
 document.getElementById("employeeRegistrationForm").addEventListener("submit", function (event) {
     event.preventDefault();
 
     Swal.fire({
         title: 'Please wait...',
-        html: 'Submitting form',
+        html: 'Sending data to server',
         allowOutsideClick: false,
-        onBeforeOpen: () => {
-            Swal.showLoading();
+        willOpen: () => {
+          Swal.showLoading();
         }
     });
 

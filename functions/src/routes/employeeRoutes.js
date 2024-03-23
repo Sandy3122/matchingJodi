@@ -28,7 +28,8 @@ router.patch('/updateRole/:employeeId', updateRole);
 // Login route
 router.post('/employee-login', handleEmployeeLogin);
 
-router.post('/user-registration',authenticateToken, handleUserRegistration);
+// User Registration
+router.post('/user-registration', handleUserRegistration);
 
 
 module.exports = router;
